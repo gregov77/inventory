@@ -1,12 +1,12 @@
 from flask import Flask
-from flask_mongoengine import MongoEngine
-db = MongoEngine()
+from flask_pymongo import PyMongo
 
 app = Flask(__name__)
-app.config['MONGODB_SETTINGS'] = {
-    'db':'test'
-}
+
 app.config['SECRET_KEY'] = 'you-will-never-guess'
-db.init_app(app)
+app.config["MONGO_URI"] = "mongodb://localhost:27017/test"
+mongo = PyMongo(app)
+
+print('Ole')
 
 from app import routes

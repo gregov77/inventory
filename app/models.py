@@ -1,9 +1,15 @@
-import mongoengine as me
+class User:
+    def __init__(self, username, password):
+        self.username = username
+        self.password = password
+
+class Optics:
+    def __init__(self, ojbPN, objQty, objLoc):
+        self.objPN = ojbPN
+        self.objQty = objQty
+        self.objLoc = objLoc
 
 
-class Optics(me.Document):
-    part_number = me.StringField(required=True)
-    quantity = me.IntField(required=True)
 
 
 
