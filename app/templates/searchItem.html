@@ -18,8 +18,8 @@
         </tr>
         {% for result in results %}
         <tr>
-          <td>result.part_number()</td>
-          <td>result.quantity()</td>
+          <td>{{ result['part_number'] }}</td>
+          <td>{{ result['quantity'] }}</td>
         </tr>
         {% endfor %}
     </table>

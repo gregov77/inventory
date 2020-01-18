@@ -4,11 +4,10 @@ class User:
         self.password = password
 
 class Optics:
-    def __init__(self, ojbPN, objQty, objLoc):
-        self.objPN = ojbPN
-        self.objQty = objQty
-        self.objLoc = objLoc
-
+    def __init__(self, part_number=None, quantity=None):
+        self.part_number = part_number
+        self.quantity = quantity
+        
 
 
 

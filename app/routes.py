@@ -1,5 +1,5 @@
 from flask import render_template, flash, redirect, url_for, request
-from app import app
+from app import app, mongo
 from .forms import OpticsForm, SearchForm
 from .models import Optics
 
@@ -14,11 +14,10 @@ def index():
 def newItem():
     form = OpticsForm()
     if form.validate_on_submit():
-        optics = Optics()
-        optics.part_number = form.part_number.data
-        optics.quantity = form.quantity.data
-        optics.save()
-        flash(f'Item added: part_number {form.part_number.data}')
+        optics = Optics(part_number=form.part_number.data, 
+                        quantity=form.quantity.data)
+        mongo.db.optics.insert_one(optics.__dict__)
+        flash(f'Item added: {optics.__dict__}')
         return redirect('/newItem')
     return render_template('newItem.html', title='Add item', form=form)
 
@@ -30,5 +29,5 @@ def searchItem():
     if form.validate_on_submit():
         searchfield = form.searchField.data
         searchvalue = form.searchValue.data
-        results = optics.objects(searchfield=searchvalue)
+        results = mongo.db.optics.find({searchfield:searchvalue})
     return render_template('searchItem.html', title='Search item', form=form, results=results)
