@@ -10,18 +10,22 @@
         </p>
     </form>
     <hr>
-    {% if results %}
-    <table>
-        <tr>
-          <th>Part number</th>
-          <th>Quantity</th>
-        </tr>
-        {% for result in results %}
-        <tr>
-          <td>{{ result['part_number'] }}</td>
-          <td>{{ result['quantity'] }}</td>
-        </tr>
-        {% endfor %}
-    </table>
+    {% if items.items %}
+    <form action="" method="post" novalidate>
+      {{ items.hidden_tag() }}
+      <table>
+          <tr>
+            <th>Part number</th>
+            <th>Quantity</th>
+          </tr>
+          {% for item in items.items %}
+          <tr>
+            <td>{{ item.part_number.data }}</td>
+            <td>{{ item.quantity.data }}</td>
+          </tr>
+          {% endfor %}
+      </table>
+      {{ form.submit() }}
+    </form>
     {% endif %}
 {% endblock %}
