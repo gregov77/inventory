@@ -27,7 +27,6 @@ def newItem():
 def searchItem():
     form = SearchForm()
     items = SearchedItemListForm()
-    text_field=[]   
 
     if form.validate_on_submit():
         
@@ -39,10 +38,9 @@ def searchItem():
             item = SearchedItemForm()
             item._id.data = result['_id']
             item.part_number.data = result['part_number']
-            text_field.append(result['part_number'])
+            item.part_number.label = str(result['part_number'])
+            print(item.part_number.label)
             item.quantity.data = result['quantity']
-            print(text_field)
             items.items.append_entry(item)
 
-    return render_template('searchItem.html', title='Search item', 
-                           form=form, items=items, text_field=text_field)
+    return render_template('searchItem.html', title='Search item', form=form, items=items)
