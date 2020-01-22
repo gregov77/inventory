@@ -13,6 +13,15 @@ class AddedItemForm(FlaskForm):
     submit = SubmitField('Submit')   
 
 
+class SearchForm(FlaskForm):
+    '''
+        Class defining the search form for the searchItem page.
+    '''
+    searchField = SelectField(u'Search by:', choices=[('part_number', 'part number')])
+    searchValue = StringField(validators=[DataRequired()])
+    submit = SubmitField('Submit')
+
+
 class SearchedItemForm(FlaskForm):
     '''
         Generic form for a single item returned from a search
@@ -21,7 +30,7 @@ class SearchedItemForm(FlaskForm):
     Note:
         This class forms the building block of the class SearchedItemListForm. 
     '''
-    _id = HiddenField('id', validators=[DataRequired()])
+    id_ = HiddenField('id', validators=[DataRequired()])
     part_number = StringField('Part number', validators=[DataRequired()])
     quantity = IntegerField('Quantity',validators=[DataRequired()])
 
@@ -33,13 +42,7 @@ class SearchedItemListForm(FlaskForm):
         items.
     '''
     items = FieldList(FormField(SearchedItemForm))
-    submit = SubmitField('Submit')
+    submit = SubmitField('Update')
 
 
-class SearchForm(FlaskForm):
-    '''
-        Class defining the search form for the searchItem page.
-    '''
-    searchField = SelectField(u'Search by:', choices=[('part_number', 'part number')])
-    searchValue = StringField(validators=[DataRequired()])
-    submit = SubmitField('Submit')
+
