@@ -8,7 +8,7 @@ from bson.objectid import ObjectId
 #
 # FUNCTIONS
 #
-def listOfSearchedItems(form):
+def listOfSearchedItems(query):
     '''
         return list of queried items from initial search
         in the searchItem view.
@@ -23,9 +23,7 @@ def listOfSearchedItems(form):
     items = SearchedItemListForm()
     pnList = []
     
-    searchfield = form.searchField.data
-    searchvalue = form.searchValue.data
-    results = mongo.db.optics.find({searchfield:searchvalue})
+    results = mongo.db.optics.find(query)
         
     for result in results:
         item = SearchedItemForm()
@@ -46,7 +44,7 @@ def index():
     return render_template('base.html')
 
 
-@app.route('/newItem', methods = ['GET', 'POST'])
+@app.route('/item/new', methods = ['GET', 'POST'])
 def newItem():
     form = AddedItemForm()
     if form.validate_on_submit():
@@ -59,25 +57,26 @@ def newItem():
     return render_template('newItem.html', title='Add item', form=form)
 
 
-@app.route('/searchItem', methods = ['GET', 'POST'])
+@app.route('/item/search', methods = ['GET', 'POST'])
 def searchItem():
     form = SearchForm()
-    items = SearchedItemListForm()
-    pnList = None
 
-    if form.validate_on_submit():
-        items, pnList = listOfSearchedItems(form)
-    
-    if items.is_submitted():
-        pass
-        # for item in items.items.entries:
-        #     print(item.data['quantity'])
-        #     query = { '_id': ObjectId(item.id_.data) }
-        #     newvalues = { '$set': { 'quantity': item.quantity.data } }
-        #     mongo.db.optics.update_one(query, newvalues)
+    # for item in items.items.entries:
+    #     print(item.data['quantity'])
+    #     query = { '_id': ObjectId(item.id_.data) }
+    #     newvalues = { '$set': { 'quantity': item.quantity.data } }
+    #     mongo.db.optics.update_one(query, newvalues)
 
-        #     items, pnList = listOfSearchedItems(form)
+    #     items, pnList = listOfSearchedItems(form)
 
     return render_template('searchItem.html', title='Search item',
-                           form=form, items=items, pnList=pnList)
+                           form=form)
 
+
+@app.route('/item/result', methods = ['GET', 'POST'])
+def foundItem():
+    query = {request.form.searchField:request.form.searchValue}
+    items, pnList = listOfSearchedItems(query)
+
+    return render_template('foundtitem.html', title='Search result',
+                           items=items, pnList=pnList)           

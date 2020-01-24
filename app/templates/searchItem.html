@@ -2,7 +2,7 @@
 
 {% block content %}
     <h1>Search item</h1>
-    <form action="" method="post" novalidate>
+    <form action='{{ url_for("foundItem") }}' method="post">
         {{ form.hidden_tag() }}
         <p>
             {{ form.searchField() }} {{ form.searchValue() }}
@@ -10,24 +10,5 @@
         </p>
     </form>
     <hr>
-    {% if items.items %}
-    {% set pnList_id=0 %}
-    <form action="" method="post" novalidate>
-      {{ items.hidden_tag() }}
-      <table>
-          <tr>
-            <th>Part number</th>
-            <th>Quantity</th>
-          </tr>
-          {% for item in items.items %}
-          <tr>
-            <td><a href="#">{{ pnList[pnList_id] }}</a></td>
-            <td>{{ item.quantity.data }}</td>
-          </tr>
-          {% set pnList_id=pnList_id+1 %}
-          {% endfor %}
-      </table>
-      {{ items.submit() }}
-    </form>
-    {% endif %}
+    
 {% endblock %}
