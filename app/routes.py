@@ -3,6 +3,7 @@ from app import app, mongo
 from .forms import AddedItemForm, SearchedItemForm, SearchedItemListForm, SearchForm
 from .models import Optics
 from bson.objectid import ObjectId
+import json 
 
 
 #
@@ -31,6 +32,7 @@ def listOfSearchedItems(query):
         item.part_number.data = result['part_number']
         item.quantity.data = result['quantity']
         pnList.append(result['part_number'])
+        print(item.id_.data)
         items.items.append_entry(item)
     
     return items, pnList
@@ -52,7 +54,7 @@ def newItem():
                         quantity=form.quantity.data)
         mongo.db.optics.insert_one(optics.__dict__)
         flash(f'Item added: {optics.__dict__}')
-        return redirect('/newItem')
+        return redirect(url_for('newItem'))
     
     return render_template('newItem.html', title='Add item', form=form)
 
@@ -60,14 +62,9 @@ def newItem():
 @app.route('/item/search', methods = ['GET', 'POST'])
 def searchItem():
     form = SearchForm()
-
-    # for item in items.items.entries:
-    #     print(item.data['quantity'])
-    #     query = { '_id': ObjectId(item.id_.data) }
-    #     newvalues = { '$set': { 'quantity': item.quantity.data } }
-    #     mongo.db.optics.update_one(query, newvalues)
-
-    #     items, pnList = listOfSearchedItems(form)
+    if form.validate_on_submit():
+        query = {form.searchField.data:form.searchValue.data}
+        return redirect(url_for('foundItem', query=query))
 
     return render_template('searchItem.html', title='Search item',
                            form=form)
@@ -75,8 +72,26 @@ def searchItem():
 
 @app.route('/item/result', methods = ['GET', 'POST'])
 def foundItem():
-    query = {request.form.searchField:request.form.searchValue}
-    items, pnList = listOfSearchedItems(query)
+    query = json.loads(request.args.get('query').replace("'", "\""))
+    form, pnList = listOfSearchedItems(query)
+    for item in form.items.data:
+            a = str(item['quantity']).split()
+            print(a)
 
-    return render_template('foundtitem.html', title='Search result',
-                           items=items, pnList=pnList)           
+    # if form.validate_on_submit():
+        
+    #     for item in form.items.data:
+    #         a = item['quantity']
+    #         print(a)
+            # query = { '_id': ObjectId(item.id_.data) }
+            # newvalues = { '$set': { 'quantity': item.quantity.data } }
+            # mongo.db.optics.update_one(query, newvalues)
+            # form, pnList = listOfSearchedItems(form)
+    return render_template('foundItem.html', title='Search result',
+                           form=form, pnList=pnList)
+
+
+@app.route('/item/update/<itemId>', methods = ['GET', 'POST'])
+def updateItem(itemId):
+
+    return render_template('updateItem.html', title='Update item')

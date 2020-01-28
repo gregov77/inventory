@@ -30,7 +30,7 @@ class SearchedItemForm(FlaskForm):
     Note:
         This class forms the building block of the class SearchedItemListForm. 
     '''
-    id_ = HiddenField('id', validators=[DataRequired()])
+    id_ = StringField('id', validators=[DataRequired()])
     part_number = StringField('Part number', validators=[DataRequired()])
     quantity = IntegerField('Quantity',validators=[DataRequired()])
 

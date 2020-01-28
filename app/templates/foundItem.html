@@ -1,24 +1,25 @@
 {% extends 'base.html' %}
 
 {% block content %}
-{% if items.items %}
+<h1>{{ title }}</h1>
+{% if form.items %}
     {% set pnList_id=0 %}
-    <form action="" method="post" novalidate>
-      {{ items.hidden_tag() }}
+    <form action="" method="post">
+      {{ form.csrf_token }}
       <table>
           <tr>
             <th>Part number</th>
             <th>Quantity</th>
           </tr>
-          {% for item in items.items %}
+          {% for item in form.items %}
           <tr>
-            <td><a href="#">{{ pnList[pnList_id] }}</a></td>
+            <td><a href="{{ url_for('updateItem', itemId=item.id_.data) }}">{{ pnList[pnList_id] }}</a></td>
             <td>{{ item.quantity.data }}</td>
           </tr>
           {% set pnList_id=pnList_id+1 %}
           {% endfor %}
       </table>
-      {{ items.submit() }}
+      {{ form.submit() }}
     </form>
     {% endif %}
 {% endblock %}
