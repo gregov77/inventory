@@ -28,11 +28,10 @@ def listOfSearchedItems(query):
         
     for result in results:
         item = SearchedItemForm()
-        item.id_.data = str(result['_id'])
-        item.part_number.data = result['part_number']
-        item.quantity.data = result['quantity']
+        item.id_ = str(result['_id'])
+        item.part_number = result['part_number']
+        item.quantity = result['quantity']
         pnList.append(result['part_number'])
-        print(item.id_.data)
         items.items.append_entry(item)
     
     return items, pnList
@@ -74,9 +73,8 @@ def searchItem():
 def foundItem():
     query = json.loads(request.args.get('query').replace("'", "\""))
     form, pnList = listOfSearchedItems(query)
-    for item in form.items.data:
-            a = str(item['quantity']).split()
-            print(a)
+    for item in form.items:
+            print(item.quantity.data)
 
     # if form.validate_on_submit():
         

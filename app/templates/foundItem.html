@@ -14,7 +14,7 @@
           {% for item in form.items %}
           <tr>
             <td><a href="{{ url_for('updateItem', itemId=item.id_.data) }}">{{ pnList[pnList_id] }}</a></td>
-            <td>{{ item.quantity.data }}</td>
+            <td>{{ item.quantity }}</td>
           </tr>
           {% set pnList_id=pnList_id+1 %}
           {% endfor %}
