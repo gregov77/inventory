@@ -2,7 +2,7 @@ from flask import render_template, flash, redirect, url_for, request
 from app import app, mongo
 from .forms import AddedItemForm, SearchedItemForm, SearchedItemListForm, SearchForm
 from .models import Optics
-from bson.objectid import ObjectId
+from bson import ObjectId
 import json 
 
 
@@ -15,26 +15,15 @@ def listOfSearchedItems(query):
         in the searchItem view.
 
     Args:
-        form(SearchForm): form returned by the searchItem view
+        query(dict): dictionnary returned by the searchItem view as query
     
     Returns:
-        items(SearchedItemForm): form containing returned items
-        pnList: list of part numbers of returned items
+        items(list): list of documents (as dict) 
     '''
-    items = SearchedItemListForm()
-    pnList = []
-    
     results = mongo.db.optics.find(query)
-        
-    for result in results:
-        item = SearchedItemForm()
-        item.id_ = str(result['_id'])
-        item.part_number = result['part_number']
-        item.quantity = result['quantity']
-        pnList.append(result['part_number'])
-        items.items.append_entry(item)
+    items = [result for result in results]    
     
-    return items, pnList
+    return items
 
 #
 # VIEWS 
@@ -71,22 +60,28 @@ def searchItem():
 
 @app.route('/item/result', methods = ['GET', 'POST'])
 def foundItem():
-    query = json.loads(request.args.get('query').replace("'", "\""))
-    form, pnList = listOfSearchedItems(query)
-    for item in form.items:
-            print(item.quantity.data)
+    form = SearchedItemListForm()
+    mainQuery = json.loads(request.args.get('query').replace("'", "\""))
+    items = listOfSearchedItems(mainQuery)
+    
+    if request.method == 'GET':
+        for it in items:
+            item = dict(zip(('id_', 'part_number', 'quantity'), 
+                        (str(it['_id']), it['part_number'], it['quantity'])))
+            form.items.append_entry(item)
 
-    # if form.validate_on_submit():
+    if request.method == 'POST':
+        for litem, fitem in zip(items, form.items):
+            if litem['quantity']  != fitem.quantity.data:
+                query = { '_id': litem['_id'] }
+                newvalues = { '$set': { 'quantity': fitem.quantity.data } }
+                mongo.db.optics.update_one(query, newvalues)
+                flash(f'Item changed: {litem["_id"]} {fitem.quantity.data}')
         
-    #     for item in form.items.data:
-    #         a = item['quantity']
-    #         print(a)
-            # query = { '_id': ObjectId(item.id_.data) }
-            # newvalues = { '$set': { 'quantity': item.quantity.data } }
-            # mongo.db.optics.update_one(query, newvalues)
-            # form, pnList = listOfSearchedItems(form)
+        return redirect(url_for('foundItem', query=mainQuery))
+    
     return render_template('foundItem.html', title='Search result',
-                           form=form, pnList=pnList)
+                           form=form)
 
 
 @app.route('/item/update/<itemId>', methods = ['GET', 'POST'])

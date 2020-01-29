@@ -3,9 +3,8 @@
 {% block content %}
 <h1>{{ title }}</h1>
 {% if form.items %}
-    {% set pnList_id=0 %}
-    <form action="" method="post">
-      {{ form.csrf_token }}
+    <form action="" method="post" novalidate>
+      {{ form.hidden_tag() }}
       <table>
           <tr>
             <th>Part number</th>
@@ -13,10 +12,9 @@
           </tr>
           {% for item in form.items %}
           <tr>
-            <td><a href="{{ url_for('updateItem', itemId=item.id_.data) }}">{{ pnList[pnList_id] }}</a></td>
+            <td><a href="{{ url_for('updateItem', itemId=item.id_.data) }}">{{ item.part_number.data }}</a></td>
             <td>{{ item.quantity }}</td>
           </tr>
-          {% set pnList_id=pnList_id+1 %}
           {% endfor %}
       </table>
       {{ form.submit() }}
