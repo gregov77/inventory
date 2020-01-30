@@ -20,7 +20,7 @@ def listOfSearchedItems(query):
     Returns:
         items(list): list of documents (as dict) 
     '''
-    results = mongo.db.optics.find(query)
+    results = mongo.db.optics.find(query).sort('_id')
     items = [result for result in results]    
     
     return items
@@ -76,7 +76,7 @@ def foundItem():
                 query = { '_id': litem['_id'] }
                 newvalues = { '$set': { 'quantity': fitem.quantity.data } }
                 mongo.db.optics.update_one(query, newvalues)
-                flash(f'Item changed: {litem["_id"]} {fitem.quantity.data}')
+                flash(f'Item changed: {litem["_id"]} {fitem.id_.data}')
         
         return redirect(url_for('foundItem', query=mainQuery))
     

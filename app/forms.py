@@ -1,7 +1,7 @@
 from .models import Optics
 from flask_wtf import FlaskForm
 from wtforms import StringField, IntegerField, SubmitField, SelectField, HiddenField, FormField, FieldList
-from wtforms.validators import DataRequired
+from wtforms.validators import DataRequired, ValidationError
 
 class AddedItemForm(FlaskForm):
     '''
@@ -30,9 +30,15 @@ class SearchedItemForm(FlaskForm):
     Note:
         This class forms the building block of the class SearchedItemListForm. 
     '''
-    id_ = StringField('id', validators=[DataRequired()])
+    id_ = HiddenField('id', validators=[DataRequired()])
     part_number = StringField('Part number', validators=[DataRequired()])
     quantity = IntegerField('Quantity',validators=[DataRequired()])
+
+    def validate_quantity(form, field):
+        if not isinstance(field.data, int):
+            raise ValidationError('Quantity must be an integer.')
+        if field.data<0:
+            raise ValidationError('Quantity must be a positive integer.')
 
 
 class SearchedItemListForm(FlaskForm):
