@@ -70,13 +70,16 @@ def foundItem():
                         (str(it['_id']), it['part_number'], it['quantity'])))
             form.items.append_entry(item)
 
-    if request.method == 'POST':
+    if request.method=='POST':
         for litem, fitem in zip(items, form.items):
-            if litem['quantity']  != fitem.quantity.data:
+            quantity = fitem.quantity.data
+            if (isinstance(quantity, int)) and (quantity >=0) and (litem['quantity']  != fitem.quantity.data):
                 query = { '_id': litem['_id'] }
                 newvalues = { '$set': { 'quantity': fitem.quantity.data } }
                 mongo.db.optics.update_one(query, newvalues)
-                flash(f'Item changed: {litem["_id"]} {fitem.id_.data}')
+                flash(f'Item changed: {litem["_id"]} {fitem.id_.data}.')
+            else:
+                flash(f'Quantity for item {fitem.id_.data} should be an integer.')
         
         return redirect(url_for('foundItem', query=mainQuery))
     
