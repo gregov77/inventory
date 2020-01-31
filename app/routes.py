@@ -1,7 +1,8 @@
 from flask import render_template, flash, redirect, url_for, request
 from app import app, mongo
-from .forms import AddedItemForm, SearchedItemForm, SearchedItemListForm, SearchForm
-from .models import Optics
+from .forms import (AddedItemForm, SearchedItemForm, SearchedItemListForm,
+    SearchInventoryForm)
+from .models import Product, InStock
 from bson import ObjectId
 import json 
 
@@ -20,7 +21,7 @@ def listOfSearchedItems(query):
     Returns:
         items(list): list of documents (as dict) 
     '''
-    results = mongo.db.optics.find(query).sort('_id')
+    results = mongo.db.stock.find(query).sort('_id')
     items = [result for result in results]    
     
     return items
@@ -38,28 +39,28 @@ def index():
 def newItem():
     form = AddedItemForm()
     if form.validate_on_submit():
-        optics = Optics(part_number=form.part_number.data, 
+        NewProduct = Product(part_number=form.part_number.data, 
                         quantity=form.quantity.data)
-        mongo.db.optics.insert_one(optics.__dict__)
-        flash(f'Item added: {optics.__dict__}')
+        mongo.db.products.insert_one(NewProduct.__dict__)
+        flash(f'Item added: {NewProduct.__dict__}')
         return redirect(url_for('newItem'))
     
     return render_template('newItem.html', title='Add item', form=form)
 
 
-@app.route('/item/search', methods = ['GET', 'POST'])
-def searchItem():
-    form = SearchForm()
+@app.route('/inventory/search', methods = ['GET', 'POST'])
+def searchInventory():
+    form = SearchInventoryForm()
     if form.validate_on_submit():
         query = {form.searchField.data:form.searchValue.data}
-        return redirect(url_for('foundItem', query=query))
+        return redirect(url_for('inventory', query=query))
 
-    return render_template('searchItem.html', title='Search item',
+    return render_template('searchInventory.html', title='Search item',
                            form=form)
 
 
-@app.route('/item/result', methods = ['GET', 'POST'])
-def foundItem():
+@app.route('/inventory', methods = ['GET', 'POST'])
+def inventory():
     form = SearchedItemListForm()
     mainQuery = json.loads(request.args.get('query').replace("'", "\""))
     items = listOfSearchedItems(mainQuery)
@@ -73,21 +74,25 @@ def foundItem():
     if request.method=='POST':
         for litem, fitem in zip(items, form.items):
             quantity = fitem.quantity.data
-            if (isinstance(quantity, int)) and (quantity >=0) and (litem['quantity']  != fitem.quantity.data):
+            if isinstance(quantity, int) and quantity >= 0:
                 query = { '_id': litem['_id'] }
-                newvalues = { '$set': { 'quantity': fitem.quantity.data } }
-                mongo.db.optics.update_one(query, newvalues)
-                flash(f'Item changed: {litem["_id"]} {fitem.id_.data}.')
+                if quantity == 0:
+                    mongo.db.stock.delete_one(query)
+                    flash(f'Item removed: {litem["_id"]} {fitem.id_.data}.')
+                if litem['quantity']  != quantity:
+                    newvalues = { '$set': { 'quantity': quantity } }
+                    mongo.db.stock.update_one(query, newvalues)
+                    flash(f'Item changed: {litem["_id"]} {quantity}.')
             else:
-                flash(f'Quantity for item {fitem.id_.data} should be an integer.')
+                flash(f'Quantity for item {litem["_id"]} should be an integer.')
         
-        return redirect(url_for('foundItem', query=mainQuery))
+        return redirect(url_for('inventory', query=mainQuery))
     
-    return render_template('foundItem.html', title='Search result',
+    return render_template('inventory.html', title='Search result',
                            form=form)
 
 
-@app.route('/item/update/<itemId>', methods = ['GET', 'POST'])
-def updateItem(itemId):
+@app.route('/item/<itemId>', methods = ['GET', 'POST'])
+def viewItem(itemId):
 
-    return render_template('updateItem.html', title='Update item')
+    return render_template('viewItem.html', title='Update item')

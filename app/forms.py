@@ -1,4 +1,3 @@
-from .models import Optics
 from flask_wtf import FlaskForm
 from wtforms import StringField, IntegerField, SubmitField, SelectField, HiddenField, FormField, FieldList
 from wtforms.validators import DataRequired, ValidationError
@@ -7,16 +6,23 @@ class AddedItemForm(FlaskForm):
     '''
         Generic form displayed to add item to database from 
         the newItem page.
+    
+    Note:
+        parameters should match Product class in models
     '''
     part_number = StringField('Part number', validators=[DataRequired()])
     quantity = IntegerField('Quantity',validators=[DataRequired()]) 
     submit = SubmitField('Submit')   
 
 
-class SearchForm(FlaskForm):
+class SearchInventoryForm(FlaskForm):
     '''
         Class defining the search form for the searchItem page.
     '''
+    search_choices = [('part_number', 'part number'),
+                      ('room', 'room'),
+                      ('location', 'location')]
+    
     searchField = SelectField(u'Search by:', choices=[('part_number', 'part number')])
     searchValue = StringField(validators=[DataRequired()])
     submit = SubmitField('Submit')
@@ -33,12 +39,6 @@ class SearchedItemForm(FlaskForm):
     id_ = HiddenField('id', validators=[DataRequired()])
     part_number = StringField('Part number', validators=[DataRequired()])
     quantity = IntegerField('Quantity',validators=[DataRequired()])
-
-    def validate_quantity(form, field):
-        if not isinstance(field.data, int):
-            raise ValidationError('Quantity must be an integer.')
-        if field.data<0:
-            raise ValidationError('Quantity must be a positive integer.')
 
 
 class SearchedItemListForm(FlaskForm):
