@@ -13,7 +13,7 @@
           {% for item in form.items %}
           {{ item.id_}}
           <tr>
-            <td><a href="{{ url_for('viewItem', itemId=item.id_.data) }}">{{ item.part_number.data }}</a></td>
+            <td><a href="{{ url_for('viewItem', itemId=item.part_number.data) }}">{{ item.part_number.data }}</a></td>
             <td>{{ item.quantity }}</td>
           </tr>
           {% endfor %}

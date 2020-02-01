@@ -1,8 +1,8 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, IntegerField, SubmitField, SelectField, HiddenField, FormField, FieldList
+from wtforms import StringField, IntegerField, SubmitField, SelectField, HiddenField, FormField, FieldList, TextAreaField
 from wtforms.validators import DataRequired, ValidationError
 
-class AddedItemForm(FlaskForm):
+class AddItemForm(FlaskForm):
     '''
         Generic form displayed to add item to database from 
         the newItem page.
@@ -10,8 +10,12 @@ class AddedItemForm(FlaskForm):
     Note:
         parameters should match Product class in models
     '''
+    group_choices = [('mirror', 'mirror'), ('stage', 'stage')]
+    
+    manufacturer = StringField('Manufacturer', validators=[DataRequired()])
     part_number = StringField('Part number', validators=[DataRequired()])
-    quantity = IntegerField('Quantity',validators=[DataRequired()]) 
+    group = SelectField('Group', choices=group_choices)
+    description = TextAreaField('Description')
     submit = SubmitField('Submit')   
 
 
@@ -23,7 +27,7 @@ class SearchInventoryForm(FlaskForm):
                       ('room', 'room'),
                       ('location', 'location')]
     
-    searchField = SelectField(u'Search by:', choices=[('part_number', 'part number')])
+    searchField = SelectField('Search by:', choices=search_choices)
     searchValue = StringField(validators=[DataRequired()])
     submit = SubmitField('Submit')
 

@@ -4,11 +4,12 @@ class User:
         self.password = password
 
 class Product:
-    def __init__(self, id_=None, part_number=None, group=None, quantity=None):
+    def __init__(self, id_=None, manufacturer=None, part_number=None, group=None, description=None):
         self.id_ = id_
+        self.manufacturer = manufacturer
         self.part_number = part_number
         self.group = group 
-        self.quantity = quantity
+        self.description = description
 
 class InStock:
     def __init__(self, id_=None, part_number=None, quantity=None, 

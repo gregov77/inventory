@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>{{ title }}</h1>
+<div>
+    Part Number: {{ product['part_number'] }}<br>
+    Manufacturer : {{ product['manufacturer'] }}<br> 
+    Type : {{ product['group'] }}<br>
+    Description: {{ product['description'] }}<br>
+    
+</div>
+
+{% endblock %}
