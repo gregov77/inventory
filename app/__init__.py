@@ -13,4 +13,7 @@ def create_app():
     # Initialise plugins
     mongo.init_app(app)
 
-    return app
+    with app.app_context():
+        from app import routes
+
+        return app
