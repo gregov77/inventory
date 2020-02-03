@@ -14,8 +14,8 @@ class AddItemForm(FlaskForm):
     
     manufacturer = StringField('Manufacturer', validators=[DataRequired()])
     part_number = StringField('Part number', validators=[DataRequired()])
-    group = SelectField('Group', choices=group_choices)
-    description = TextAreaField('Description')
+    group = SelectField('Type', choices=group_choices, validators=[DataRequired()])
+    description = TextAreaField('Description', validators=[DataRequired()])
     submit = SubmitField('Submit')   
 
 

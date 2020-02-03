@@ -44,8 +44,12 @@ def newItem():
                              part_number=form.part_number.data,
                              group = form.group.data, 
                              description = form.description.data)
-        mongo.db.products.insert_one(NewProduct.__dict__)
-        flash(f'Item added: {NewProduct.__dict__}')
+        checkNewProduct = mongo.db.products.find_one(NewProduct.__dict__)
+        if checkNewProduct:
+            flash(f'Item already in the database.')
+        else:
+            mongo.db.products.insert_one(NewProduct.__dict__)
+            flash(f'Item added: {NewProduct.__dict__}')
         return redirect(url_for('newItem'))
     
     return render_template('newItem.html', title='Add item', form=form)
