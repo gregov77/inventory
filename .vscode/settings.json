@@ -1,3 +1,9 @@
 {
-    "python.pythonPath": "/home/gregory/anaconda3/envs/webdev/bin/python"
+    "python.pythonPath": "/home/gregory/anaconda3/envs/webdev/bin/python",
+    "python.testing.pytestArgs": [
+        "tests"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.nosetestsEnabled": false,
+    "python.testing.pytestEnabled": true
 }

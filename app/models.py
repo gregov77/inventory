@@ -16,11 +16,10 @@ class Product:
 class InStock:
     def __init__(self, id_=None, part_number=None, quantity=None, 
                  room=None, location=None):
-        self.id_ = id_
-        self.part_number = part_number
-        self.quantity = quantity
-        self.room = room
-        self.location = location
+        self.part_number = part_number.upper()
+        self.quantity = int(quantity)
+        self.room = room.upper()
+        self.location = location.upper()
         self.stocked_date = datetime.utcnow()
 
 
