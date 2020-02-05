@@ -6,7 +6,6 @@ from .forms import (AddItemForm, SearchedItemForm, SearchedItemListForm,
 from .models import Product, InStock
 from bson import ObjectId
 import json
-import re
 
 
 #
@@ -45,9 +44,9 @@ def newItem():
                              part_number=form.part_number.data,
                              group = form.group.data, 
                              description = form.description.data)
-        checkNewProduct = mongo.db.products.find_one(NewProduct.__dict__)
+        checkNewProduct = mongo.db.products.find_one({'_id':NewProduct._id})
         if checkNewProduct:
-            flash(f'Item already in the database.')
+            flash(u'Item already in the database.')
         else:
             mongo.db.products.insert_one(NewProduct.__dict__)
             flash(f'Item added: {NewProduct.__dict__}')
