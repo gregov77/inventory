@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, IntegerField, SubmitField, SelectField, HiddenField, FormField, FieldList, TextAreaField
+from wtforms import StringField, IntegerField, FloatField, SubmitField, SelectField, HiddenField, FormField, FieldList, TextAreaField
 from wtforms.validators import DataRequired, ValidationError
 
 class AddItemForm(FlaskForm):
@@ -15,6 +15,7 @@ class AddItemForm(FlaskForm):
     manufacturer = StringField('Manufacturer', validators=[DataRequired()])
     part_number = StringField('Part number', validators=[DataRequired()])
     group = SelectField('Type', choices=group_choices, validators=[DataRequired()])
+    price = FloatField('Last price')
     description = TextAreaField('Description', validators=[DataRequired()])
     submit = SubmitField('Submit')   
 

@@ -18,7 +18,7 @@ def client():
         mongo.db.products.drop()
         mongo.db.instock.drop()
         product = Product(manufacturer='CVI', part_number='TLM1',
-                          group='optics', description='a mirror')
+                          group='optics', price='1000.00', description='a mirror')
         stock = InStock(code='CVI-TLM1', quantity=int(10), room='JA212',
                          location='cabinet A')
         mongo.db.products.insert_one(product.__dict__)

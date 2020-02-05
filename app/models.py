@@ -6,11 +6,12 @@ class User:
         self.password = password
 
 class Product:
-    def __init__(self, manufacturer, part_number, group, description):
+    def __init__(self, manufacturer, part_number, group, price, description):
         self.manufacturer = manufacturer.upper()
         self.part_number = part_number.upper()
         self._id = self.manufacturer[:3]+'-'+self.part_number
-        self.group = group.upper() 
+        self.group = group.upper()
+        self.price = price
         self.description = description
 
 class InStock:

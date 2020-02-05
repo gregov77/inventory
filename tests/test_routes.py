@@ -9,7 +9,7 @@ def test_newItem(client):
 
 def test_newItem_post_success(client):
     product = dict(manufacturer='CVI', part_number='TLM2',
-                   group='optics', description='a mirror')
+                   group='optics', price='1000.00', description='a mirror')
     response = client.post('/item/new', data=product, follow_redirects=True)
     assert response.status_code == 200
 

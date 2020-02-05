@@ -43,6 +43,7 @@ def newItem():
         NewProduct = Product(manufacturer=form.manufacturer.data,
                              part_number=form.part_number.data,
                              group = form.group.data, 
+                             price = form.price.data,
                              description = form.description.data)
         checkNewProduct = mongo.db.products.find_one({'_id':NewProduct._id})
         if checkNewProduct:
