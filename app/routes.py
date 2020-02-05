@@ -5,7 +5,8 @@ from .forms import (AddItemForm, SearchedItemForm, SearchedItemListForm,
     SearchInventoryForm)
 from .models import Product, InStock
 from bson import ObjectId
-import json 
+import json
+import re
 
 
 #
@@ -59,7 +60,16 @@ def newItem():
 def searchInventory():
     form = SearchInventoryForm()
     if form.validate_on_submit():
-        query = {form.searchField.data:form.searchValue.data}
+        if form.searchField.data=='code':
+            value = (form.searchValue.data).upper().replace(' ', '')+'$'
+            query = {form.searchField.data:{'$regex':value}}
+        elif form.searchField.data=='room':
+            value = (form.searchValue.data).upper().replace(' ', '')
+            query = {form.searchField.data:value}
+        else:
+            value = (form.searchValue.data).upper()
+            query = {form.searchField.data:value}
+
         return redirect(url_for('inventory', query=query))
 
     return render_template('searchInventory.html', title='Search inventory',
@@ -74,8 +84,13 @@ def inventory():
     
     if request.method == 'GET':
         for it in items:
-            item = dict(zip(('id_', 'part_number', 'quantity'), 
-                        (str(it['_id']), it['part_number'], it['quantity'])))
+            item = dict(zip(('id_', 'code', 'room', 'location',
+                             'stocked_date', 'quantity'), 
+                        (it['_id'], it['code'], it['room'],
+                         it['location'], it['stocked_date'].strftime('%Y-%m-%d'),
+                         it['quantity'])
+                            )
+                        )
             form.items.append_entry(item)
 
     if request.method=='POST':
@@ -101,6 +116,6 @@ def inventory():
 
 @current_app.route('/item/<itemId>', methods = ['GET', 'POST'])
 def viewItem(itemId):
-    product = mongo.db.products.find_one({'part_number':itemId})
+    product = mongo.db.products.find_one({'_id':itemId})
     print(product)
     return render_template('viewItem.html', title='Item', product=product)

@@ -23,7 +23,7 @@ class SearchInventoryForm(FlaskForm):
     '''
         Class defining the search form for the searchItem page.
     '''
-    search_choices = [('part_number', 'part number'),
+    search_choices = [('code', 'part number'),
                       ('room', 'room'),
                       ('location', 'location')]
     
@@ -41,9 +41,12 @@ class SearchedItemForm(FlaskForm):
         This class forms the building block of the class SearchedItemListForm. 
     '''
     id_ = HiddenField('id', validators=[DataRequired()])
-    part_number = StringField('Part number', validators=[DataRequired()])
+    code = StringField('Code', validators=[DataRequired()])
+    room = StringField('Room', validators=[DataRequired()])
+    location = StringField('Room', validators=[DataRequired()])
+    stocked_date = StringField('Room', validators=[DataRequired()])
     quantity = IntegerField('Quantity',validators=[DataRequired()])
-
+    
 
 class SearchedItemListForm(FlaskForm):
     '''

@@ -7,13 +7,19 @@
       {{ form.hidden_tag() }}
       <table>
           <tr>
-            <th>Part number</th>
+            <th>Code</th>
+            <th>Room</th>
+            <th>Location</th>
+            <th>Date stocked</th>
             <th>Quantity</th>
           </tr>
           {% for item in form.items %}
           {{ item.id_}}
           <tr>
-            <td><a href="{{ url_for('viewItem', itemId=item.part_number.data) }}">{{ item.part_number.data }}</a></td>
+            <td><a href="{{ url_for('viewItem', itemId=item.code.data) }}">{{ item.code.data }}</a></td>
+            <td>{{ item.room.data }}</td>
+            <td>{{ item.location.data }}</td>
+            <td>{{ item.stocked_date.data }}</td>
             <td>{{ item.quantity }}</td>
           </tr>
           {% endfor %}

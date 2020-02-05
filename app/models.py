@@ -14,9 +14,9 @@ class Product:
         self.description = description
 
 class InStock:
-    def __init__(self, id_=None, part_number=None, quantity=None, 
+    def __init__(self, id_=None, code=None, quantity=None, 
                  room=None, location=None):
-        self.part_number = part_number.upper()
+        self.code = code.upper()
         self.quantity = int(quantity)
         self.room = room.upper()
         self.location = location.upper()
