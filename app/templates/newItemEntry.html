@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>{{ title }}</h1>
+
+    <p>Type: {{ group }}</p>
+
+    <hr>
+
+    <p>Subtype: {{ subgroup }}</p>
+
+    <hr>
+
+    <form action="" method="post">
+        {{ form.hidden_tag() }}
+        {% for field in form %}
+            {% if field.name!='submit' and field.name!='csrf_token' %}
+                <p>{{ field.label }} {{ field }}</p>
+            {% endif %}
+        {% endfor %}
+        {{ form.submit }}
+    </form>    
+
+{% endblock %}

@@ -1,11 +1,12 @@
 from flask import render_template, flash, redirect, url_for, request
 from flask import current_app
 from app import mongo
-from .forms import (AddItemForm, SearchedItemForm, SearchedItemListForm,
-    SearchInventoryForm)
+from .forms import (NewTypeForm, SearchedItemForm, SearchedItemListForm,
+    SearchInventoryForm, NewSubTypeForm, MirrorForm, formDict)
 from .models import Product, InStock
 from bson import ObjectId
 import json
+from .select_lists import optics_choices
 
 
 #
@@ -38,22 +39,54 @@ def index():
 
 @current_app.route('/item/new', methods = ['GET', 'POST'])
 def newItem():
-    form = AddItemForm()
-    if form.validate_on_submit():
-        NewProduct = Product(manufacturer=form.manufacturer.data,
-                             part_number=form.part_number.data,
-                             group = form.group.data, 
-                             price = form.price.data,
-                             description = form.description.data)
-        checkNewProduct = mongo.db.products.find_one({'_id':NewProduct._id})
-        if checkNewProduct:
-            flash(u'Item already in the database.')
-        else:
-            mongo.db.products.insert_one(NewProduct.__dict__)
-            flash(f'Item added: {NewProduct.__dict__}')
-        return redirect(url_for('newItem'))
+    typeform = NewTypeForm()
+
+    if typeform.validate_on_submit():
+        return redirect(url_for('newItemGroup', group=typeform.group.data))
     
-    return render_template('newItem.html', title='Add item', form=form)
+    return render_template('newItem.html', title='Add item', typeform=typeform)
+
+
+@current_app.route('/item/<group>', methods = ['GET', 'POST'])
+def newItemGroup(group):
+    subtypeform = NewSubTypeForm()
+    if group=='optics':
+        subtypeform.subgroup.choices = optics_choices
+
+    if subtypeform.validate_on_submit():
+        subgroup = subtypeform.subgroup.data
+        return redirect(url_for('newItemEntry', group=group, subgroup=subgroup))    
+
+    return render_template('newItemGroup.html', title='Add item', group=group, subtypeform=subtypeform)   
+
+
+@current_app.route('/item/<group>/<subgroup>', methods = ['GET', 'POST'])
+def newItemEntry(group, subgroup):
+    form = formDict[subgroup]()
+
+    return render_template('newItemEntry.html', title='Add item', group=group, subgroup=subgroup, form=form)    
+        # if subtypeform.validate_on_submit():
+        #     print(subtypeform.subgroup.data)
+        #     return redirect(url_for('index'))
+        # if subtypeform.subgroup.data == 'mirrors':
+        #     productform = MirrorForm()
+
+        # return render_template('newItem.html', title='Add item',
+        #                        typeform=typeform, subtypeform=subtypeform, productform=productform)        
+        # NewProduct = Product(manufacturer=form.manufacturer.data,
+        #                      part_number=form.part_number.data,
+        #                      group = form.group.data, 
+        #                      price = form.price.data,
+        #                      description = form.description.data)
+        # checkNewProduct = mongo.db.products.find_one({'_id':NewProduct._id})
+        # if checkNewProduct:
+        #     flash(u'Item already in the database.')
+        # else:
+        #     mongo.db.products.insert_one(NewProduct.__dict__)
+        #     flash(f'Item added: {NewProduct.__dict__}')
+        # return redirect(url_for('newItem'))
+    
+    #return render_template('newItem.html', title='Add item', typeform=typeform, subtypeform=None)
 
 
 @current_app.route('/inventory/search', methods = ['GET', 'POST'])
@@ -93,7 +126,7 @@ def inventory():
                         )
             form.items.append_entry(item)
 
-    if request.method=='POST':
+    if form.validate_on_submit():
         for litem, fitem in zip(items, form.items):
             quantity = fitem.quantity.data
             if isinstance(quantity, int) and quantity >= 0:

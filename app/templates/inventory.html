@@ -14,6 +14,7 @@
             <th>Quantity</th>
           </tr>
           {% for item in form.items %}
+          {{ item.hidden_tag() }}
           {{ item.id_}}
           <tr>
             <td><a href="{{ url_for('viewItem', itemId=item.code.data) }}">{{ item.code.data }}</a></td>

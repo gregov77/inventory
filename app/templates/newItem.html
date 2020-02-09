@@ -3,27 +3,7 @@
 {% block content %}
     <h1>{{ title }}</h1>
     <form action="" method="post">
-        {{ form.hidden_tag() }}
-        <p>
-            {{ form.manufacturer.label }}<br>
-            {{ form.manufacturer() }}
-        </p>
-        <p>
-            {{ form.part_number.label }}<br>
-            {{ form.part_number() }}
-        </p>
-        <p>
-            {{ form.group.label }}<br>
-            {{ form.group() }}
-        </p>
-        <p>
-            {{ form.price.label }}<br>
-            {{ form.price() }}
-        </p>
-        <p>
-            {{ form.description.label }}<br>
-            {{ form.description() }}
-        </p>
-        <p>{{ form.submit() }}</p>
+        {{ typeform.hidden_tag() }}
+        <p>{{ typeform.group.label }} {{ typeform.group }} {{ typeform.submit() }}</p>
     </form>
 {% endblock %}

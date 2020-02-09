@@ -1,24 +1,51 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, IntegerField, FloatField, SubmitField, SelectField, HiddenField, FormField, FieldList, TextAreaField
-from wtforms.validators import DataRequired, ValidationError
+from wtforms.validators import DataRequired, ValidationError, InputRequired
+from .select_lists import type_choices, optics_choices, coating_choices
 
-class AddItemForm(FlaskForm):
+
+class NewTypeForm(FlaskForm):
     '''
-        Generic form displayed to add item to database from 
+        Form displayed to choose type of new item to add to database from 
         the newItem page.
-    
-    Note:
-        parameters should match Product class in models
     '''
-    group_choices = [('mirror', 'mirror'), ('stage', 'stage')]
-    
+    group = SelectField('Type:', choices=type_choices, validators=[InputRequired()])
+    submit = SubmitField('Submit')
+
+
+class NewSubTypeForm(FlaskForm):
+    '''
+        Form displayed to choose subtype of new item to add to database from 
+        the newItem page.
+
+    Note:
+        SelectField uses dynamic choices depending on the initial type of product.
+    '''
+    subgroup = SelectField('Subtype:', coerce=str, validators=[InputRequired()])
+    submit = SubmitField('Submit')
+
+
+class ProductForm(FlaskForm):
+    '''
+        Parent form for all products.
+    '''
+     
     manufacturer = StringField('Manufacturer', validators=[DataRequired()])
     part_number = StringField('Part number', validators=[DataRequired()])
-    group = SelectField('Type', choices=group_choices, validators=[DataRequired()])
     price = FloatField('Last price')
     description = TextAreaField('Description', validators=[DataRequired()])
-    submit = SubmitField('Submit')   
+    submit = SubmitField('Submit')
 
+
+class MirrorForm(ProductForm):
+    '''
+        Parent form for all products.
+    '''
+     
+    diameter = FloatField('Diameter', validators=[DataRequired()])
+    coating = SelectField('Coating', choices=coating_choices, validators=[DataRequired()])
+    curvature = FloatField('Curvature', validators=[DataRequired()])
+    
 
 class SearchInventoryForm(FlaskForm):
     '''
@@ -57,6 +84,11 @@ class SearchedItemListForm(FlaskForm):
     '''
     items = FieldList(FormField(SearchedItemForm))
     submit = SubmitField('Update')
+
+
+
+
+formDict = {'mirrors':MirrorForm}
 
 
 
