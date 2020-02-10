@@ -3,11 +3,15 @@
 {% block content %}
 <h1>{{ title }}</h1>
 <div>
-    Part Number: {{ product['part_number'] }}<br>
-    Manufacturer : {{ product['manufacturer'] }}<br> 
-    Type : {{ product['group'] }}<br>
-    Description: {{ product['description'] }}<br>
+    <a href=#>Edit</a> <a href=#>Store</a> <a href='{{ url_for("inventory", query={"code":id}) }}'>Check stock</a>
+</div>
+<div>
+    {% for k, v in product.items() %}
+        <dt>{{ k }}:</dt> <dd>{{ v }}</dd>
+    {% endfor %}
     
 </div>
-
+<div>
+    <a href=#>Delete item</a>
+</div>
 {% endblock %}

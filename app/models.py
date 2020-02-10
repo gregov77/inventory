@@ -7,27 +7,36 @@ class User:
 
 
 class Product:
-    def __init__(self, manufacturer, part_number, group, subgroup, price, description):
-        self.manufacturer = manufacturer.upper()
-        self.part_number = part_number.upper()
+    def __init__(self, dictionary):
+        self.manufacturer = 'init'
+        self.part_number = 'init'
+        for k, v in dictionary.items():
+            setattr(self, k, v)
         self._id = self.manufacturer[:3]+'-'+self.part_number
-        self.group = group.upper()
-        self.subgroup = subgroup.upper()
-        self.price = price
-        self.description = description
 
 
-class Mirror(Product):
-    diameter = None
-    coating = None
-    curvature = None
+# class Product:
+#     def __init__(self, manufacturer, part_number, group, subgroup, price, description):
+#         self.manufacturer = manufacturer.upper()
+#         self.part_number = part_number.upper()
+#         self._id = self.manufacturer[:3]+'-'+self.part_number
+#         self.group = group.upper()
+#         self.subgroup = subgroup.upper()
+#         self.price = price
+#         self.description = description
 
-    def __init__(self, manufacturer, part_number, group, subgroup, price, description,
-                 diameter, coating, curvature):
-        super().__init__(manufacturer, part_number, group, price, description)
-        self.diameter = diameter
-        self.coating = coating
-        self.curvature = curvature
+
+# class Mirror(Product):
+#     diameter = None
+#     coating = None
+#     curvature = None
+
+#     def __init__(self, manufacturer, part_number, group, subgroup, price, description,
+#                  diameter, coating, curvature):
+#         super().__init__(manufacturer, part_number, group, price, description)
+#         self.diameter = diameter
+#         self.coating = coating
+#         self.curvature = curvature
 
 
 class InStock:

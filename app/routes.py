@@ -7,26 +7,49 @@ from .models import Product, InStock
 from bson import ObjectId
 import json
 from .select_lists import optics_choices
-
+from .func_helpers import listOfSearchedItems, createProductDict
 
 #
 # FUNCTIONS
 #
-def listOfSearchedItems(query):
-    '''
-        return list of queried items from initial search
-        in the searchItem view.
+# def listOfSearchedItems(query):
+#     '''
+#         return list of queried items from initial search
+#         in the searchItem view.
 
-    Args:
-        query(dict): dictionnary returned by the searchItem view as query
+#     Args:
+#         query(dict): dictionnary returned by the searchItem view as query
     
-    Returns:
-        items(list): list of documents (as dict) 
-    '''
-    results = mongo.db.instock.find(query).sort('_id')
-    items = [result for result in results]    
+#     Returns:
+#         items(list): list of documents (as dict) 
+#     '''
+#     results = mongo.db.instock.find(query).sort('_id')
+#     items = [result for result in results]    
     
-    return items
+#     return items
+
+
+# def createProductDict(group, subgroup, dict_):
+#     '''
+#         Produce a dictionnary used to instantiate a Product.
+
+#     Args:
+#         group(str): main type of object as string
+#         subgroup(str): subtype of object as string
+#         dict_(dict): dictionnary of keys/values from form data
+    
+#     Returns
+#         productDict(dict): dictionnary for object instantiation
+#     '''
+#     productDict = dict(group=group.upper(), subgroup=subgroup.upper())
+#     for k, v in dict_.items():
+#         if k!='submit' and k!='csrf_token':
+#             if isinstance(v, str) and k!='description': v = v.upper() 
+#             productDict[k] = v
+#     productDict['_id'] = productDict['manufacturer']+'-'+productDict['part_number']
+    
+#     return productDict
+
 
 #
 # VIEWS 
@@ -47,7 +70,7 @@ def newItem():
     return render_template('newItem.html', title='Add item', typeform=typeform)
 
 
-@current_app.route('/item/<group>', methods = ['GET', 'POST'])
+@current_app.route('/item/new/<group>', methods = ['GET', 'POST'])
 def newItemGroup(group):
     subtypeform = NewSubTypeForm()
     if group=='optics':
@@ -60,33 +83,21 @@ def newItemGroup(group):
     return render_template('newItemGroup.html', title='Add item', group=group, subtypeform=subtypeform)   
 
 
-@current_app.route('/item/<group>/<subgroup>', methods = ['GET', 'POST'])
+@current_app.route('/item/new/<group>/<subgroup>', methods = ['GET', 'POST'])
 def newItemEntry(group, subgroup):
     form = formDict[subgroup]()
+    if form.is_submitted():
+        newProduct = createProductDict(group, subgroup, form.data)
+        checkNewProduct = mongo.db.products.find_one({'_id':newProduct['_id']})
+        if checkNewProduct:
+            flash('Item already in the database.')
+        else:
+            mongo.db.products.insert_one(newProduct)
+            flash(f'Item added: {newProduct["_id"]}')
+        
+            return redirect(url_for('viewItem', itemId=newProduct['_id']))
 
     return render_template('newItemEntry.html', title='Add item', group=group, subgroup=subgroup, form=form)    
-        # if subtypeform.validate_on_submit():
-        #     print(subtypeform.subgroup.data)
-        #     return redirect(url_for('index'))
-        # if subtypeform.subgroup.data == 'mirrors':
-        #     productform = MirrorForm()
-
-        # return render_template('newItem.html', title='Add item',
-        #                        typeform=typeform, subtypeform=subtypeform, productform=productform)        
-        # NewProduct = Product(manufacturer=form.manufacturer.data,
-        #                      part_number=form.part_number.data,
-        #                      group = form.group.data, 
-        #                      price = form.price.data,
-        #                      description = form.description.data)
-        # checkNewProduct = mongo.db.products.find_one({'_id':NewProduct._id})
-        # if checkNewProduct:
-        #     flash(u'Item already in the database.')
-        # else:
-        #     mongo.db.products.insert_one(NewProduct.__dict__)
-        #     flash(f'Item added: {NewProduct.__dict__}')
-        # return redirect(url_for('newItem'))
-    
-    #return render_template('newItem.html', title='Add item', typeform=typeform, subtypeform=None)
 
 
 @current_app.route('/inventory/search', methods = ['GET', 'POST'])
@@ -147,8 +158,8 @@ def inventory():
                            form=form)
 
 
-@current_app.route('/item/<itemId>', methods = ['GET', 'POST'])
+@current_app.route('/item/view/<itemId>', methods = ['GET', 'POST'])
 def viewItem(itemId):
     product = mongo.db.products.find_one({'_id':itemId})
-    print(product)
-    return render_template('viewItem.html', title='Item', product=product)
+    id = product.pop('_id')
+    return render_template('viewItem.html', title='Item', product=product, id=id)
