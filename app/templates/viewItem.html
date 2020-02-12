@@ -7,9 +7,16 @@
 </div>
 <div>
     {% for k, v in product.items() %}
-        <dt>{{ k }}:</dt> <dd>{{ v }}</dd>
+        {% if k!='documentation' %}
+            <dt>{{ k }}:</dt> <dd>{{ v }}</dd>
+        {% endif %}
     {% endfor %}
-    
+</div>
+<div>
+    <dt>Documentation</dt>
+    {% for doc in product['documentation'] %}
+    <dd><a href='{{ url_for("get_upload", filename=doc)}}'> {{ doc }} </a></dd>
+    {% endfor %}
 </div>
 <div>
     <a href=#>Delete item</a>

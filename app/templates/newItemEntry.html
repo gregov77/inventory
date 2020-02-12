@@ -9,7 +9,7 @@
 
     <hr>
 
-    <form action="" method="post">
+    <form action="" method="post" enctype="multipart/form-data">
         {{ form.hidden_tag() }}
         {% for field in form %}
             {% if field.name!='submit' and field.name!='csrf_token' %}

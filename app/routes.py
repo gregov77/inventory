@@ -9,51 +9,7 @@ import json
 from .select_lists import optics_choices
 from .func_helpers import listOfSearchedItems, createProductDict
 
-#
-# FUNCTIONS
-#
-# def listOfSearchedItems(query):
-#     '''
-#         return list of queried items from initial search
-#         in the searchItem view.
 
-#     Args:
-#         query(dict): dictionnary returned by the searchItem view as query
-    
-#     Returns:
-#         items(list): list of documents (as dict) 
-#     '''
-#     results = mongo.db.instock.find(query).sort('_id')
-#     items = [result for result in results]    
-    
-#     return items
-
-
-# def createProductDict(group, subgroup, dict_):
-#     '''
-#         Produce a dictionnary used to instantiate a Product.
-
-#     Args:
-#         group(str): main type of object as string
-#         subgroup(str): subtype of object as string
-#         dict_(dict): dictionnary of keys/values from form data
-    
-#     Returns
-#         productDict(dict): dictionnary for object instantiation
-#     '''
-#     productDict = dict(group=group.upper(), subgroup=subgroup.upper())
-#     for k, v in dict_.items():
-#         if k!='submit' and k!='csrf_token':
-#             if isinstance(v, str) and k!='description': v = v.upper() 
-#             productDict[k] = v
-#     productDict['_id'] = productDict['manufacturer']+'-'+productDict['part_number']
-    
-#     return productDict
-
-
-#
-# VIEWS 
-#
 @current_app.route('/')
 @current_app.route('/index')
 def index():
@@ -87,12 +43,16 @@ def newItemGroup(group):
 def newItemEntry(group, subgroup):
     form = formDict[subgroup]()
     if form.is_submitted():
-        newProduct = createProductDict(group, subgroup, form.data)
+        newProduct = createProductDict(subgroup, form.data)
         checkNewProduct = mongo.db.products.find_one({'_id':newProduct['_id']})
         if checkNewProduct:
             flash('Item already in the database.')
         else:
             mongo.db.products.insert_one(newProduct)
+            docs = request.files.getlist(form.documentation.name)
+            if docs:
+                 for doc, doc_name in zip(docs, newProduct['documentation']):
+                    mongo.save_file(doc_name, doc)
             flash(f'Item added: {newProduct["_id"]}')
         
             return redirect(url_for('viewItem', itemId=newProduct['_id']))
@@ -163,3 +123,8 @@ def viewItem(itemId):
     product = mongo.db.products.find_one({'_id':itemId})
     id = product.pop('_id')
     return render_template('viewItem.html', title='Item', product=product, id=id)
+
+
+@current_app.route("/uploads/<path:filename>")
+def get_upload(filename):
+    return mongo.send_file(filename)
