@@ -8,7 +8,7 @@ optics_choices = [
     ('filters', 'Filters'),
     ('gratings', 'Gratings'),
     ('lenses', 'Lenses'),
-    ('mirrors', 'Mirrors'),
+    ('MIRRORS', 'Mirrors'),
     ('objective_lenses', 'Objective lenses'),
     ('polarizers', 'Polarizers'),
     ('prisms', 'Prisms'),

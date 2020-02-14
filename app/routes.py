@@ -61,10 +61,10 @@ def newItemEntry(group, subgroup):
     return render_template('newItemEntry.html', title='Add item', group=group, subgroup=subgroup, form=form)    
 
 
-@current_app.route('/item/update/<str:itemId>', methods= ['GET', 'POST'])
+@current_app.route('/item/update/<string:itemId>', methods= ['GET', 'POST'])
 def updateItem(itemId):
    item = mongo.db.products.find_one({'_id':itemId}) 
-   form = formDict[item['type']](vars(item))
+   form = formDict[item['type']](data=item)
 
    return render_template('updateItem.html', title='Update item', form=form)
 

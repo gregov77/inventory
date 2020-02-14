@@ -91,7 +91,7 @@ class SearchedItemListForm(FlaskForm):
 
 
 
-formDict = {'mirrors':MirrorForm}
+formDict = {'MIRRORS':MirrorForm}
 
 
 
