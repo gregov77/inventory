@@ -29,7 +29,7 @@ def createProductDict(subgroup, dict_):
     Returns
         productDict(dict): dictionnary for object instantiation
     '''
-    productDict = dict(subgroup=subgroup.upper())
+    productDict = dict(type=subgroup.upper())
     for k, v in dict_.items():
         if k!='submit' and k!='csrf_token' and k!='documentation':
             if isinstance(v, str) and k!='description': v = v.upper() 
