@@ -5,6 +5,7 @@ from app import create_app, mongo
 import gridfs
 from app.models import InStock
 from app.func_helpers import createProductDict
+from bson import ObjectId
 
 
 @pytest.fixture(scope='module')
@@ -20,16 +21,20 @@ def client():
     with app.app_context():
         mongo.db.products.drop()
         mongo.db.instock.drop()
+        fin = fs.find_one({'filename':'CVI-TLM1doctlm1.pdf'})
+        if fin:
+            fs.delete(fin['_id'])
+        filename = '/home/gregory/Documents/webDev/inventory/tests/CVI-TLM1doctlm1.pdf'
+        with open(filename, 'rb') as f:
+           uid = fs.put(f.read(), filename='CVI-TLM1doctlm1.pdf')
+        
         product = dict(type='MIRRORS', manufacturer='CVI', part_number='TLM1',
                        price='1000.00', description='a mirror', diameter=1,
-                       coating='DIELECTRIC', curvature=0, documentation=['CVI-TLM1doctlm1.pdf'])
+                       coating='DIELECTRIC', curvature=0, documentation={str(uid):'CVI-TLM1doctlm1.pdf'})
         product['_id'] = product['manufacturer']+'-'+product['part_number']
         stock = InStock(code='CVI-TLM1', quantity=int(10), room='JA212',
                          location='cabinet A')
         mongo.db.products.insert_one(product)
-        #filename = '/home/gregory/webdev/inventory/tests/CVI-TLM1doctlm1.pdf'
-        #with open(filename, 'rb') as f:
-        #    fs.put(f.read(), filename='CVI-TLM1doctlm1.pdf')
         mongo.db.instock.insert_one(stock.__dict__)
 
     # Establish an application context before running the tests.

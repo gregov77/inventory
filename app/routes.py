@@ -1,6 +1,7 @@
-from flask import render_template, flash, redirect, url_for, request
+from flask import render_template, flash, redirect, url_for, request, send_file
 from flask import current_app
 from app import mongo
+import gridfs
 from .forms import (NewTypeForm, SearchedItemForm, SearchedItemListForm,
     SearchInventoryForm, NewSubTypeForm, MirrorForm, formDict)
 from .models import Product, InStock
@@ -9,7 +10,7 @@ import json
 from .select_lists import optics_choices
 from .func_helpers import listOfSearchedItems, createProductDict
 
-
+fs = gridfs.GridFS(mongo.db)
 
 @current_app.route('/')
 @current_app.route('/index')
@@ -49,11 +50,15 @@ def newItemEntry(group, subgroup):
         if checkNewProduct:
             flash('Item already in the database.')
         else:
-            mongo.db.products.insert_one(newProduct)
             docs = request.files.getlist(form.documentation.name)
             if docs:
-                 for doc, doc_name in zip(docs, newProduct['documentation']):
-                    mongo.save_file(doc_name, doc)
+                newProduct['documentation'] = dict()
+                for doc in docs:
+                    uid = fs.put(doc, filename=doc.filename)
+                    newProduct['documentation'][str(uid)]=doc.filename
+                # for doc, doc_name in zip(docs, newProduct['documentation']):
+                #     mongo.save_file(doc_name, doc)
+            mongo.db.products.insert_one(newProduct)
             flash(f'Item added: {newProduct["_id"]}')
         
             return redirect(url_for('viewItem', itemId=newProduct['_id']))
@@ -61,12 +66,12 @@ def newItemEntry(group, subgroup):
     return render_template('newItemEntry.html', title='Add item', group=group, subgroup=subgroup, form=form)    
 
 
-@current_app.route('/item/update/<string:itemId>', methods= ['GET', 'POST'])
+@current_app.route('/item/update/<itemId>', methods= ['GET', 'POST'])
 def updateItem(itemId):
    item = mongo.db.products.find_one({'_id':itemId}) 
    form = formDict[item['type']](data=item)
 
-   return render_template('updateItem.html', title='Update item', form=form)
+   return render_template('updateItem.html', title='Update item', form=form, itemId=itemId)
 
 
 @current_app.route('/inventory/search', methods = ['GET', 'POST'])
@@ -130,10 +135,33 @@ def inventory():
 @current_app.route('/item/view/<itemId>', methods = ['GET', 'POST'])
 def viewItem(itemId):
     product = mongo.db.products.find_one({'_id':itemId})
+    print(product)
     id = product.pop('_id')
     return render_template('viewItem.html', title='Item', product=product, id=id)
 
 
-@current_app.route("/uploads/<path:filename>")
-def get_upload(filename):
-    return mongo.send_file(filename)
+@current_app.route("/uploads/<string:id>")
+def get_upload(id):
+    fin = fs.find_one({'_id':ObjectId(id)})
+    data = fin.read()
+    fext = fin.filename[-4:]
+    tmpfile = current_app.config['TMP']+'tmpfile'+fext
+    with open(tmpfile, 'wb') as fout:
+        fout.write(data)
+    
+    return send_file(tmpfile)
+
+
+@current_app.route('/delete/<string:itemId>/<string:docId>')
+def delete_document(itemId, docId):
+    fs.delete(ObjectId(docId))
+    product = mongo.db.products.find_one({'_id':itemId})
+    product['documentation'].pop(docId)
+    if product['documentation']:
+        mongo.db.products.update_one({'_id':itemId}, {'$set':{'documentation':product['documentation']}})
+    else:
+        mongo.db.products.update_one({'_id':itemId}, {'$unset':{'documentation':1}})
+    
+    return redirect(url_for('updateItem', itemId=itemId))
+ 
+

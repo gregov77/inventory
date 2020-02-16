@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_pymongo import PyMongo
 
+
 mongo = PyMongo()
 
 def create_app():
@@ -9,7 +10,8 @@ def create_app():
     
     app.config['SECRET_KEY'] = 'you-will-never-guess'
     app.config["MONGO_URI"] = 'mongodb://localhost:27017/test'
-    
+    app.config["TMP"] = '/home/gregory/temp/'
+
     # Initialise plugins
     mongo.init_app(app)
 

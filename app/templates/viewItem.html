@@ -3,7 +3,7 @@
 {% block content %}
 <h1>{{ title }}</h1>
 <div>
-    <a href='{{ url_for("updateItem", itemId=product["_id"]) }}'>Edit</a> <a href=#>Store</a> <a href='{{ url_for("inventory", query={"code":id}) }}'>Check stock</a>
+    <a href='{{ url_for("updateItem", itemId=id) }}'>Edit</a> <a href=#>Store</a> <a href='{{ url_for("inventory", query={"code":id}) }}'>Check stock</a>
 </div>
 <div>
     {% for k, v in product.items() %}
@@ -14,8 +14,8 @@
 </div>
 <div>
     <dt>Documentation</dt>
-    {% for doc in product['documentation'] %}
-    <dd><a href='{{ url_for("get_upload", filename=doc)}}'> {{ doc }} </a></dd>
+    {% for k, v in product['documentation'].items() %}
+    <dd><a href='{{ url_for("get_upload", id=k) }}'> {{ v }} </a></dd>
     {% endfor %}
 </div>
 <div>

@@ -14,8 +14,8 @@
 <div>
     <dt>Documentation</dt>
     {% if form.documentation.data %}
-        {% for doc in form.documentation.data %}
-        <dd>{{ doc }}<a href=#>x</a></dd>
+        {% for doc_id, doc_name in form.documentation.data.items() %}
+        <dd>{{ doc_name }}<a href='{{ url_for("delete_document", itemId=itemId, docId=doc_id) }}'>x</a></dd>
         {% endfor %}
     {% else %}
         <dd>No documentation</dd>
