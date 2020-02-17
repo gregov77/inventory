@@ -8,7 +8,7 @@ from .models import Product, InStock
 from bson import ObjectId
 import json
 from .select_lists import optics_choices
-from .func_helpers import listOfSearchedItems, createProductDict
+from .func_helpers import listOfSearchedItems, createProductDict, updateProductDict
 
 fs = gridfs.GridFS(mongo.db)
 
@@ -44,6 +44,7 @@ def newItemGroup(group):
 @current_app.route('/item/new/<group>/<subgroup>', methods = ['GET', 'POST'])
 def newItemEntry(group, subgroup):
     form = formDict[subgroup]()
+
     if form.is_submitted():
         newProduct = createProductDict(subgroup, form.data)
         checkNewProduct = mongo.db.products.find_one({'_id':newProduct['_id']})
@@ -56,8 +57,7 @@ def newItemEntry(group, subgroup):
                 for doc in docs:
                     uid = fs.put(doc, filename=doc.filename)
                     newProduct['documentation'][str(uid)]=doc.filename
-                # for doc, doc_name in zip(docs, newProduct['documentation']):
-                #     mongo.save_file(doc_name, doc)
+
             mongo.db.products.insert_one(newProduct)
             flash(f'Item added: {newProduct["_id"]}')
         
@@ -68,10 +68,32 @@ def newItemEntry(group, subgroup):
 
 @current_app.route('/item/update/<itemId>', methods= ['GET', 'POST'])
 def updateItem(itemId):
-   item = mongo.db.products.find_one({'_id':itemId}) 
-   form = formDict[item['type']](data=item)
+    item = mongo.db.products.find_one({'_id':itemId})
+    if 'documentation' in item.keys():
+        itemDoc = item.pop('documentation')
+    else:
+        itemDoc = None 
+    form = formDict[item['type']](data=item)
 
-   return render_template('updateItem.html', title='Update item', form=form, itemId=itemId)
+    if form.is_submitted() and request.method=='POST':
+        updateDict = updateProductDict(itemId, form.data)
+        docs = request.files.getlist(form.documentation.name)
+        if docs and docs[0].filename!='':
+            print('there are docs')
+            if 'documentation' not in item.keys():
+                updateDict['documentation'] = dict()
+            else:
+                updateDict['documentation'] = item['documentation']
+            for doc in docs:
+                uid = fs.put(doc, filename=doc.filename)
+                updateDict['documentation'][str(uid)]=doc.filename
+        if len(updateDict)>0:
+            mongo.db.products.update_one({'_id':itemId},
+                                         {'$set':updateDict}, upsert=True)
+        return redirect(url_for('viewItem', itemId=itemId))
+
+    return render_template('updateItem.html', title='Update item',
+                           form=form, itemId=itemId, itemDoc=itemDoc)
 
 
 @current_app.route('/inventory/search', methods = ['GET', 'POST'])
@@ -135,7 +157,6 @@ def inventory():
 @current_app.route('/item/view/<itemId>', methods = ['GET', 'POST'])
 def viewItem(itemId):
     product = mongo.db.products.find_one({'_id':itemId})
-    print(product)
     id = product.pop('_id')
     return render_template('viewItem.html', title='Item', product=product, id=id)
 
@@ -157,7 +178,7 @@ def delete_document(itemId, docId):
     fs.delete(ObjectId(docId))
     product = mongo.db.products.find_one({'_id':itemId})
     product['documentation'].pop(docId)
-    if product['documentation']:
+    if len(product['documentation'])>0:
         mongo.db.products.update_one({'_id':itemId}, {'$set':{'documentation':product['documentation']}})
     else:
         mongo.db.products.update_one({'_id':itemId}, {'$unset':{'documentation':1}})
@@ -165,3 +186,6 @@ def delete_document(itemId, docId):
     return redirect(url_for('updateItem', itemId=itemId))
  
 
+@current_app.route('/locations/')
+def locations():
+    

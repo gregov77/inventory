@@ -24,7 +24,7 @@ def client():
         fin = fs.find_one({'filename':'CVI-TLM1doctlm1.pdf'})
         if fin:
             fs.delete(fin['_id'])
-        filename = '/home/gregory/Documents/webDev/inventory/tests/CVI-TLM1doctlm1.pdf'
+        filename = '/home/gregory/webdev/inventory/tests/CVI-TLM1doctlm1.pdf'
         with open(filename, 'rb') as f:
            uid = fs.put(f.read(), filename='CVI-TLM1doctlm1.pdf')
         

@@ -1,5 +1,7 @@
 from app import mongo
 
+formFieldOnly = ['submit', 'csrf_token', 'documentation']
+
 def listOfSearchedItems(query):
     '''
         return list of queried items from initial search
@@ -31,13 +33,32 @@ def createProductDict(subgroup, dict_):
     '''
     productDict = dict(type=subgroup.upper())
     for k, v in dict_.items():
-        if k!='submit' and k!='csrf_token' and k!='documentation':
-            if isinstance(v, str) and k!='description': v = v.upper() 
+        if k not in formFieldOnly:
+            if isinstance(v, str): v = v.upper() 
             productDict[k] = v
     productDict['_id'] = productDict['manufacturer']+'-'+productDict['part_number']
-    if 'documentation' in dict_.keys():
-        documents = []
-        for document in dict_['documentation']:
-            documents.append(dict_['manufacturer']+'-'+dict_['part_number']+document.filename)
-        productDict['documentation'] = documents
+
     return productDict
+
+
+def updateProductDict(productId, dataDict):
+    '''
+        Produce a dictionnary used to update a Product.
+
+    Args:
+        product(str): key _id of the product to update
+        dataDict(dict): dictionnary of keys/values from form data
+    
+    Returns
+        productDict(dict): dictionnary of changed keys/values
+    '''
+    productDict = dict()
+    product = mongo.db.products.find_one({'_id':productId})
+    for k, v in dataDict.items():
+        if k not in formFieldOnly:
+            if product[k] != v: productDict[k] = v
+
+    print(productDict)
+    return productDict
+
+    

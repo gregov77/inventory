@@ -14,9 +14,13 @@
 </div>
 <div>
     <dt>Documentation</dt>
-    {% for k, v in product['documentation'].items() %}
-    <dd><a href='{{ url_for("get_upload", id=k) }}'> {{ v }} </a></dd>
-    {% endfor %}
+    {% if 'documentation' in product %}
+        {% for k, v in product['documentation'].items() %}
+        <dd><a href='{{ url_for("get_upload", id=k) }}'> {{ v }} </a></dd>
+        {% endfor %}
+    {% else %}
+        <dd>No Documentation</dd>
+    {% endif %}
 </div>
 <div>
     <a href=#>Delete item</a>
