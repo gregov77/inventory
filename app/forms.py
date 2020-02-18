@@ -89,6 +89,20 @@ class SearchedItemListForm(FlaskForm):
     submit = SubmitField('Update')
 
 
+class Locations(FlaskForm):
+    '''
+        form to add/remove rooms and locations.
+    '''
+    room = StringField('Room')
+    addRoom = SubmitField('Add')
+    roomList = SelectField('Room list', coerce=str)
+    viewLocation = SubmitField('View locations')
+    deleteRoom = SubmitField('Delete')
+    location = StringField('Location')
+    addLocation = SubmitField('Add')
+    locationList = SelectField('Location list', coerce=str)
+    deleteLocation = SubmitField('Delete')
+
 
 
 formDict = {'MIRRORS':MirrorForm}

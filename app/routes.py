@@ -3,7 +3,7 @@ from flask import current_app
 from app import mongo
 import gridfs
 from .forms import (NewTypeForm, SearchedItemForm, SearchedItemListForm,
-    SearchInventoryForm, NewSubTypeForm, MirrorForm, formDict)
+    SearchInventoryForm, NewSubTypeForm, MirrorForm, Locations, formDict)
 from .models import Product, InStock
 from bson import ObjectId
 import json
@@ -186,6 +186,25 @@ def delete_document(itemId, docId):
     return redirect(url_for('updateItem', itemId=itemId))
  
 
-@current_app.route('/locations/')
+@current_app.route('/locations/', methods=['GET', 'POST'])
 def locations():
+    form = Locations()
+    form.roomList.choices = [('',''), ('JA212', 'JA212')]
+    form.locationList.choices = [('',''), ('CAB A', 'CAB A')]
+
+    if form.is_submitted() and form.addRoom.data==True:
+        return 'add room'
     
+    if form.is_submitted() and form.addLocation.data==True:
+        return 'add location'
+
+    if form.is_submitted() and form.viewLocation.data==True:
+        return 'view location'
+
+    if form.is_submitted() and form.deleteRoom.data==True:
+        return 'delete room'
+
+    if form.is_submitted() and form.deleteLocation.data==True:
+        return 'delete location'
+
+    return render_template('locations.html', title='Locations', form=form)

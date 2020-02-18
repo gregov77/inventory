@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>{{ title }}</h1>
+<div>
+    <form action="" method="POST">
+        {{ form.hidden_tag() }}
+        <h2>Rooms</h2>
+        <p>{{ form.room.label}} {{form.room}} {{ form.addRoom }}</p> 
+        <p>{{ form.roomList.label }} {{ form.roomList }} {{ form.viewLocation }} {{ form.deleteRoom }}</p>
+        <br>
+        <h2>Locations</h2>
+        <p>{{ form.location.label}} {{form.location}} {{ form.addLocation }}</p>
+        <p>{{ form.locationList.label }} {{ form.locationList }} {{ form.deleteLocation }}</p> 
+    </form>
+</div>
+
+{% endblock %}
