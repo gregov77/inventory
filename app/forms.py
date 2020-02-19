@@ -96,12 +96,12 @@ class Locations(FlaskForm):
     room = StringField('Room')
     addRoom = SubmitField('Add')
     roomList = SelectField('Room list', coerce=str)
-    viewLocation = SubmitField('View locations')
+    viewStorage = SubmitField('View locations')
     deleteRoom = SubmitField('Delete')
-    location = StringField('Location')
-    addLocation = SubmitField('Add')
-    locationList = SelectField('Location list', coerce=str)
-    deleteLocation = SubmitField('Delete')
+    storage = StringField('Storage')
+    addStorage = SubmitField('Add')
+    storageList = SelectField('Storage list', coerce=str)
+    deleteStorage = SubmitField('Delete')
 
 
 

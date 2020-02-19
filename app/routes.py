@@ -8,7 +8,9 @@ from .models import Product, InStock
 from bson import ObjectId
 import json
 from .select_lists import optics_choices
-from .func_helpers import listOfSearchedItems, createProductDict, updateProductDict
+from .func_helpers import (listOfSearchedItems, createProductDict, updateProductDict,
+                           makeRoomList, makeStorageList, saveRoom, saveStorage, deleteRoom,
+                           deleteStorage)
 
 fs = gridfs.GridFS(mongo.db)
 
@@ -188,23 +190,48 @@ def delete_document(itemId, docId):
 
 @current_app.route('/locations/', methods=['GET', 'POST'])
 def locations():
-    form = Locations()
-    form.roomList.choices = [('',''), ('JA212', 'JA212')]
-    form.locationList.choices = [('',''), ('CAB A', 'CAB A')]
-
-    if form.is_submitted() and form.addRoom.data==True:
-        return 'add room'
+    try:
+        form = Locations(roomList=request.args.get('roomDefault'))
+    except NameError:
+        form = Locations()
+    form.roomList.choices = makeRoomList()
+    try:
+        form.storageList.choices = makeStorageList(request.args.get('roomDefault'))
+    except KeyError:
+        form.storageList.choices = [('','')]
     
-    if form.is_submitted() and form.addLocation.data==True:
-        return 'add location'
+    if form.validate_on_submit() and form.addRoom.data:
+        if form.room.data !='':
+            newRoom = saveRoom(form.room.data)
+            roomDefault = newRoom
+            flash(f'Room {newRoom} added.')
+        else:
+            flash('Provide a proper room name as string.')
 
-    if form.is_submitted() and form.viewLocation.data==True:
-        return 'view location'
+        return redirect(url_for('locations', roomDefault=roomDefault))
+    
+    if form.validate_on_submit() and form.addStorage.data:
+        if form.storage.data !='':
+            print(form.roomList.data, form.storage.data)
+            newStorage = saveStorage(form.roomList.data, form.storage.data)
+            flash(f'storage {newStorage} added in room {form.roomList.data}.')
+        else:
+            flash('Provide a proper storage name as string.')
+        
+        return redirect(url_for('locations', roomDefault=form.roomList.data))
 
-    if form.is_submitted() and form.deleteRoom.data==True:
-        return 'delete room'
+    if form.validate_on_submit() and form.viewStorage.data:
+        return redirect(url_for('locations', roomDefault=form.roomList.data))
 
-    if form.is_submitted() and form.deleteLocation.data==True:
-        return 'delete location'
+    if form.validate_on_submit() and form.deleteRoom.data:
+        deleteRoom(form.roomList.data)
+        flash(f'Room {form.roomList.data} has been deleted')
+        
+        return redirect(url_for('locations'))
 
+    if form.validate_on_submit() and form.deleteStorage.data:
+        deleteStorage(form.roomList.data, form.storageList.data)
+    
+        return redirect(url_for('locations', roomDefault=form.roomList.data))
+    
     return render_template('locations.html', title='Locations', form=form)

@@ -6,12 +6,12 @@
     <form action="" method="POST">
         {{ form.hidden_tag() }}
         <h2>Rooms</h2>
-        <p>{{ form.room.label}} {{form.room}} {{ form.addRoom }}</p> 
-        <p>{{ form.roomList.label }} {{ form.roomList }} {{ form.viewLocation }} {{ form.deleteRoom }}</p>
+        <p>{{form.room}} {{ form.addRoom }}</p> 
         <br>
-        <h2>Locations</h2>
-        <p>{{ form.location.label}} {{form.location}} {{ form.addLocation }}</p>
-        <p>{{ form.locationList.label }} {{ form.locationList }} {{ form.deleteLocation }}</p> 
+        <h2>Storage</h2>
+        <p>{{ form.roomList.label }} {{ form.roomList }} {{ form.viewStorage }} {{ form.deleteRoom }}</p>
+        <p>{{ form.storage.label}} {{form.storage}} {{ form.addStorage }}</p>
+        <p>{{ form.storageList.label }} {{ form.storageList }} {{ form.deleteStorage }}</p> 
     </form>
 </div>
 
