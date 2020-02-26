@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>{{ title }}</h1>
+<p>Item code: <b>{{ itemId }}</b></p>
+<div>
+    <form action="" method="POST">
+        <p>{{ form.roomSelect.label }} {{ form.roomSelect }} {{ form.roomSubmit }}</p>
+        <p>{{ form.storageSelect.label }} {{ form.storageSelect }}</p>
+        <p>{{ form.quantity.label }} {{ form.quantity }}</p>
+        <p>{{ form.submit }}</p>
+        
+    </form>
+</div>
+{% endblock %}

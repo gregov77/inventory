@@ -2,15 +2,15 @@ from flask import render_template, flash, redirect, url_for, request, send_file
 from flask import current_app
 from app import mongo
 import gridfs
-from .forms import (NewTypeForm, SearchedItemForm, SearchedItemListForm,
-    SearchInventoryForm, NewSubTypeForm, MirrorForm, Locations, formDict)
-from .models import Product, InStock
+from .forms import (NewTypeForm, SearchedItemForm, SearchedItemListForm, StoreForm,
+    SearchInventoryForm, NewSubTypeForm, MirrorForm, LocationsForm, formDict)
+from .models import InStock
 from bson import ObjectId
 import json
 from .select_lists import optics_choices
-from .func_helpers import (listOfSearchedItems, createProductDict, updateProductDict,
-                           makeRoomList, makeStorageList, saveRoom, saveStorage, deleteRoom,
-                           deleteStorage)
+from .func_helpers import (get_products_and_stocks, get_productDict, update_productDict,
+                           set_roomList, set_storageList, save_room, save_storage, delete_room,
+                           delete_storage)
 
 fs = gridfs.GridFS(mongo.db)
 
@@ -48,7 +48,7 @@ def newItemEntry(group, subgroup):
     form = formDict[subgroup]()
 
     if form.is_submitted():
-        newProduct = createProductDict(subgroup, form.data)
+        newProduct = get_productDict(subgroup, form.data)
         checkNewProduct = mongo.db.products.find_one({'_id':newProduct['_id']})
         if checkNewProduct:
             flash('Item already in the database.')
@@ -78,7 +78,7 @@ def updateItem(itemId):
     form = formDict[item['type']](data=item)
 
     if form.is_submitted() and request.method=='POST':
-        updateDict = updateProductDict(itemId, form.data)
+        updateDict = update_productDict(itemId, form.data)
         docs = request.files.getlist(form.documentation.name)
         if docs and docs[0].filename!='':
             print('there are docs')
@@ -102,9 +102,10 @@ def updateItem(itemId):
 def searchInventory():
     form = SearchInventoryForm()
     if form.validate_on_submit():
-        if form.searchField.data=='code':
-            value = (form.searchValue.data).upper().replace(' ', '')+'$'
-            query = {form.searchField.data:{'$regex':value}}
+        if form.searchField.data=='part_number':
+            value = (form.searchValue.data).upper()
+            query = f'{{ "{form.searchField.data}":{{"$regex":".*{value}.*"}} }}'
+            print(query)
         elif form.searchField.data=='room':
             value = (form.searchValue.data).upper().replace(' ', '')
             query = {form.searchField.data:value}
@@ -121,22 +122,22 @@ def searchInventory():
 @current_app.route('/inventory', methods = ['GET', 'POST'])
 def inventory():
     form = SearchedItemListForm()
-    mainQuery = json.loads(request.args.get('query').replace("'", "\""))
-    items = listOfSearchedItems(mainQuery)
-    
+    query = json.loads(request.args.get('query').replace("'", "\""))
+    products, stocks = get_products_and_stocks(query)
+
     if request.method == 'GET':
-        for it in items:
-            item = dict(zip(('id_', 'code', 'room', 'location',
+        for stock in stocks:
+            item = dict(zip(('id_', 'code', 'room', 'storage',
                              'stocked_date', 'quantity'), 
-                        (it['_id'], it['code'], it['room'],
-                         it['location'], it['stocked_date'].strftime('%Y-%m-%d'),
-                         it['quantity'])
+                            (stock['_id'],stock['code'],stock['room'],
+                             stock['storage'],stock['stocked_date'].strftime('%Y-%m-%d'),
+                             stock['quantity'])
                             )
                         )
             form.items.append_entry(item)
 
-    if form.validate_on_submit():
-        for litem, fitem in zip(items, form.items):
+    if form.is_submitted():
+        for litem, fitem in zip(stocks, form.items):
             quantity = fitem.quantity.data
             if isinstance(quantity, int) and quantity >= 0:
                 query = { '_id': litem['_id'] }
@@ -150,10 +151,9 @@ def inventory():
             else:
                 flash(f'Quantity for item {litem["_id"]} should be an integer.')
         
-        return redirect(url_for('inventory', query=mainQuery))
+        return redirect(url_for('inventory', query=query))
     
-    return render_template('inventory.html', title='Search result',
-                           form=form)
+    return render_template('inventory.html', title='Inventory', form=form, products=products)
 
 
 @current_app.route('/item/view/<itemId>', methods = ['GET', 'POST'])
@@ -161,6 +161,27 @@ def viewItem(itemId):
     product = mongo.db.products.find_one({'_id':itemId})
     id = product.pop('_id')
     return render_template('viewItem.html', title='Item', product=product, id=id)
+
+
+@current_app.route('/item/store/<itemId>', methods=['GET', 'POST'])
+def storeItem(itemId):
+    form = StoreForm()
+    form.roomSelect.choices = set_roomList()
+    form.storageSelect.choices = [('','')]
+
+    if form.is_submitted() and form.roomSubmit.data:
+        form.storageSelect.choices = set_storageList(form.roomSelect.data)
+
+    if form.is_submitted() and form.submit.data:
+        newStock = InStock(code=itemId,
+                           quantity=int(form.quantity.data), 
+                           room=form.roomSelect.data,
+                           storage=form.storageSelect.data)
+        mongo.db.instock.insert_one(vars(newStock))
+        flash(f'{newStock.quantity} {newStock.code} stocked in {newStock.room}, {newStock.storage}')
+        
+
+    return render_template('storeItem.html', title='Store item', form=form, itemId=itemId)
 
 
 @current_app.route("/uploads/<string:id>")
@@ -191,18 +212,18 @@ def delete_document(itemId, docId):
 @current_app.route('/locations/', methods=['GET', 'POST'])
 def locations():
     try:
-        form = Locations(roomList=request.args.get('roomDefault'))
+        form = LocationsForm(roomList=request.args.get('roomDefault'))
     except NameError:
-        form = Locations()
-    form.roomList.choices = makeRoomList()
+        form = LocationsForm()
+    form.roomList.choices = set_roomList()
     try:
-        form.storageList.choices = makeStorageList(request.args.get('roomDefault'))
+        form.storageList.choices = set_storageList(request.args.get('roomDefault'))
     except KeyError:
         form.storageList.choices = [('','')]
     
     if form.validate_on_submit() and form.addRoom.data:
         if form.room.data !='':
-            newRoom = saveRoom(form.room.data)
+            newRoom = save_room(form.room.data)
             roomDefault = newRoom
             flash(f'Room {newRoom} added.')
         else:
@@ -213,7 +234,7 @@ def locations():
     if form.validate_on_submit() and form.addStorage.data:
         if form.storage.data !='':
             print(form.roomList.data, form.storage.data)
-            newStorage = saveStorage(form.roomList.data, form.storage.data)
+            newStorage = save_storage(form.roomList.data, form.storage.data)
             flash(f'storage {newStorage} added in room {form.roomList.data}.')
         else:
             flash('Provide a proper storage name as string.')
@@ -223,14 +244,14 @@ def locations():
     if form.validate_on_submit() and form.viewStorage.data:
         return redirect(url_for('locations', roomDefault=form.roomList.data))
 
-    if form.validate_on_submit() and form.deleteRoom.data:
-        deleteRoom(form.roomList.data)
+    if form.validate_on_submit() and form.delete_room.data:
+        delete_room(form.roomList.data)
         flash(f'Room {form.roomList.data} has been deleted')
         
         return redirect(url_for('locations'))
 
-    if form.validate_on_submit() and form.deleteStorage.data:
-        deleteStorage(form.roomList.data, form.storageList.data)
+    if form.validate_on_submit() and form.delete_storage.data:
+        delete_storage(form.roomList.data, form.storageList.data)
     
         return redirect(url_for('locations', roomDefault=form.roomList.data))
     

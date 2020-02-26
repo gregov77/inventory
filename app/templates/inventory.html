@@ -2,6 +2,12 @@
 
 {% block content %}
 <h1>{{ title }}</h1>
+<h2>List of items</h2>
+{% for product in products %}
+<a href="{{ url_for('viewItem', itemId=product['_id']) }}">{{ product['_id'] }}</a> {{ product['type'] }} <br>
+{% endfor %}
+
+<h2>Stock</h2>
 {% if form.items %}
     <form action="" method="post" novalidate>
       {{ form.hidden_tag() }}
@@ -9,7 +15,7 @@
           <tr>
             <th>Code</th>
             <th>Room</th>
-            <th>Location</th>
+            <th>Storage</th>
             <th>Date stocked</th>
             <th>Quantity</th>
           </tr>
@@ -17,9 +23,9 @@
           {{ item.hidden_tag() }}
           {{ item.id_}}
           <tr>
-            <td><a href="{{ url_for('viewItem', itemId=item.code.data) }}">{{ item.code.data }}</a></td>
+            <td><b>{{ item.code.data }}</b></td>
             <td>{{ item.room.data }}</td>
-            <td>{{ item.location.data }}</td>
+            <td>{{ item.storage.data }}</td>
             <td>{{ item.stocked_date.data }}</td>
             <td>{{ item.quantity }}</td>
           </tr>

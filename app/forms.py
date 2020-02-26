@@ -54,7 +54,7 @@ class SearchInventoryForm(FlaskForm):
     '''
         Class defining the search form for the searchItem page.
     '''
-    search_choices = [('code', 'part number'),
+    search_choices = [('part_number', 'part number'),
                       ('room', 'room'),
                       ('location', 'location')]
     
@@ -74,10 +74,10 @@ class SearchedItemForm(FlaskForm):
     id_ = HiddenField('id', validators=[DataRequired()])
     code = StringField('Code', validators=[DataRequired()])
     room = StringField('Room', validators=[DataRequired()])
-    location = StringField('Room', validators=[DataRequired()])
-    stocked_date = StringField('Room', validators=[DataRequired()])
+    storage = StringField('Storage', validators=[DataRequired()])
+    stocked_date = StringField('Date', validators=[DataRequired()])
     quantity = IntegerField('Quantity',validators=[DataRequired()])
-    
+
 
 class SearchedItemListForm(FlaskForm):
     '''
@@ -89,7 +89,7 @@ class SearchedItemListForm(FlaskForm):
     submit = SubmitField('Update')
 
 
-class Locations(FlaskForm):
+class LocationsForm(FlaskForm):
     '''
         form to add/remove rooms and locations.
     '''
@@ -97,12 +97,23 @@ class Locations(FlaskForm):
     addRoom = SubmitField('Add')
     roomList = SelectField('Room list', coerce=str)
     viewStorage = SubmitField('View locations')
-    deleteRoom = SubmitField('Delete')
+    delete_room = SubmitField('Delete')
     storage = StringField('Storage')
     addStorage = SubmitField('Add')
     storageList = SelectField('Storage list', coerce=str)
-    deleteStorage = SubmitField('Delete')
+    delete_storage = SubmitField('Delete')
 
+
+class StoreForm(FlaskForm):
+    '''
+        form to add item to inventory
+    '''
+    
+    roomSelect = SelectField('Room', coerce=str, validators=[DataRequired()])
+    roomSubmit = SubmitField('Select')
+    storageSelect = SelectField('Storage', coerce=str)
+    quantity = IntegerField('Quantity')
+    submit = SubmitField('Submit')
 
 
 formDict = {'MIRRORS':MirrorForm}

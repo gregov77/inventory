@@ -1,10 +1,10 @@
 import pytest
 import sys
-sys.path.append('/home/gregory/webdev/inventory/')
+sys.path.append('/home/gregory/Documents/webDev/inventory/')
 from app import create_app, mongo
 import gridfs
 from app.models import InStock
-from app.func_helpers import createProductDict
+from app.func_helpers import get_productDict
 from bson import ObjectId
 
 
@@ -24,7 +24,7 @@ def client():
         fin = fs.find_one({'filename':'CVI-TLM1doctlm1.pdf'})
         if fin:
             fs.delete(fin['_id'])
-        filename = '/home/gregory/webdev/inventory/tests/CVI-TLM1doctlm1.pdf'
+        filename = '/home/gregory/Documents/webDev/inventory/tests/CVI-TLM1doctlm1.pdf'
         with open(filename, 'rb') as f:
            uid = fs.put(f.read(), filename='CVI-TLM1doctlm1.pdf')
         
@@ -33,7 +33,7 @@ def client():
                        coating='DIELECTRIC', curvature=0, documentation={str(uid):'CVI-TLM1doctlm1.pdf'})
         product['_id'] = product['manufacturer']+'-'+product['part_number']
         stock = InStock(code='CVI-TLM1', quantity=int(10), room='JA212',
-                         location='cabinet A')
+                         storage='cabinet A')
         mongo.db.products.insert_one(product)
         mongo.db.instock.insert_one(stock.__dict__)
 

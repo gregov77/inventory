@@ -3,7 +3,7 @@ import json
 
 formFieldOnly = ['submit', 'csrf_token', 'documentation']
 
-def listOfSearchedItems(query):
+def get_products_and_stocks(query):
     '''
         return list of queried items from initial search
         in the searchItem view.
@@ -12,20 +12,24 @@ def listOfSearchedItems(query):
         query(dict): dictionnary returned by the searchItem view as query
     
     Returns:
-        items(list): list of documents (as dict) 
+        products(list): list of product documents (as dict) matching the query
+        stocks(list): list of stocks (as dict) matching the query 
     '''
-    results = mongo.db.instock.find(query).sort('_id')
-    items = [result for result in results]    
+    productList = mongo.db.products.find(query, {'_id':1, 'type':1})
+    products = [product for product in productList]
+    distinctProductId = list({product['_id'] for product in products})
+    stockQuery = {'code':{'$in':distinctProductId}}
+    stockList = mongo.db.instock.find(stockQuery).sort('_id')
+    stocks = [stock for stock in stockList]    
     
-    return items
+    return products, stocks
 
 
-def createProductDict(subgroup, dict_):
+def get_productDict(subgroup, dict_):
     '''
         Produce a dictionnary used to instantiate a Product.
 
     Args:
-        group(str): main type of object as string
         subgroup(str): subtype of object as string
         dict_(dict): dictionnary of keys/values from form data
     
@@ -34,7 +38,7 @@ def createProductDict(subgroup, dict_):
     '''
     productDict = dict(type=subgroup.upper())
     for k, v in dict_.items():
-        if k not in formFieldOnly:
+        if k not in formFieldOnly+'description':
             if isinstance(v, str): v = v.upper() 
             productDict[k] = v
     productDict['_id'] = productDict['manufacturer']+'-'+productDict['part_number']
@@ -42,7 +46,7 @@ def createProductDict(subgroup, dict_):
     return productDict
 
 
-def updateProductDict(productId, dataDict):
+def update_productDict(productId, dataDict):
     '''
         Produce a dictionnary used to update a Product.
 
@@ -63,7 +67,7 @@ def updateProductDict(productId, dataDict):
     return productDict
 
 
-def makeRoomList():
+def set_roomList():
     '''
         Produce a list of tuples to fill Locations.roomList.choices
         from file locations.json.
@@ -80,7 +84,7 @@ def makeRoomList():
     return room_list
 
 
-def makeStorageList(room):
+def set_storageList(room):
     '''
         Produce a list of tuples to fill Locations.storageList.choices
         from file locations.json.
@@ -98,7 +102,7 @@ def makeStorageList(room):
     return storage_list
 
 
-def saveRoom(room):
+def save_room(room):
     '''
         Add room name to locations.json
 
@@ -119,7 +123,7 @@ def saveRoom(room):
     return room
 
 
-def saveStorage(room, storage):
+def save_storage(room, storage):
     '''
         Add storage name to locations.json
 
@@ -142,7 +146,7 @@ def saveStorage(room, storage):
     return storage
 
 
-def deleteRoom(room):
+def delete_room(room):
     '''
         Delete room name from locations.json
 
@@ -161,7 +165,7 @@ def deleteRoom(room):
         json.dump(locations, fd)
 
 
-def deleteStorage(room, storage):
+def delete_storage(room, storage):
     '''
         Delete storage name from locations.json
 
