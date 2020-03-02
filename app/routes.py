@@ -1,5 +1,5 @@
 from flask import render_template, flash, redirect, url_for, request, send_file
-from flask import current_app
+from flask import current_app, jsonify
 from app import mongo
 import gridfs
 from .forms import (NewTypeForm, SearchedItemForm, SearchedItemListForm, StoreForm,
@@ -13,6 +13,12 @@ from .func_helpers import (get_products_and_stocks, get_productDict, update_prod
                            delete_storage)
 
 fs = gridfs.GridFS(mongo.db)
+
+@current_app.route('/check', methods = ['GET', 'POST'])
+def check():
+    a = request.args.get('a', 0, type=str)
+    return jsonify(result=a)
+
 
 @current_app.route('/')
 @current_app.route('/index')

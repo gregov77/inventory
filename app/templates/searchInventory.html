@@ -1,14 +1,37 @@
 {% extends "base.html" %}
 
+<!-- <script> -->
+    <!-- $(function() { -->
+    <!-- $('#cars').bind('click', function() { -->
+        <!-- $.getJSON('/check', { -->
+        <!-- a: $( "#cars" ).val() -->
+        <!-- }, function(data) { -->
+        <!-- $("#result").text(data.result); -->
+        <!-- }); -->
+        <!-- return false; -->
+    <!-- }); -->
+    <!-- }); -->
+<!-- </script> -->
+
 {% block content %}
     <h1>Search item</h1>
-    <form action='' method="post">
-        {{ form.hidden_tag() }}
-        <p>
-            {{ form.searchField() }} {{ form.searchValue() }}
-            {{ form.submit() }}
-        </p>
-    </form>
-    <hr>
-    
+
+    <select id="cars">
+        <option value="volvo">Volvo</option>
+        <option value="saab">Saab</option>
+        <option value="mercedes">Mercedes</option>
+        <option value="audi">Audi</option>
+    </select>
+
+    <span id=result>?</span>
+
+
+    <script>
+        $(document).ready(function(){
+            $("#cars").change(function(){
+                var selectedCar  = $("#cars").val(); 
+                $("#result").text(selectedCar);
+            });
+        });
+        </script>    
 {% endblock %}

@@ -1,4 +1,5 @@
 type_choices = [
+    ('None', 'Choose a type'),
     ('optics', 'Optics')
 ]
 

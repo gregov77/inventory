@@ -58,8 +58,8 @@ class SearchInventoryForm(FlaskForm):
                       ('room', 'room'),
                       ('location', 'location')]
     
-    searchField = SelectField('Search by:', choices=search_choices)
-    searchValue = StringField(validators=[DataRequired()])
+    searchField = SelectField('Product type:', choices=type_choices)
+    #searchValue = StringField(validators=[DataRequired()])
     submit = SubmitField('Submit')
 
 
