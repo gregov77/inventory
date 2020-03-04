@@ -24,3 +24,16 @@ coating_choices = [
     ('uncoated', 'Uncoated')
 ]
 
+choices = {'optics':[('beamsplitters', 'Beamsplitters'),
+                     ('diffusers', 'Diffusers'),
+                     ('filters', 'Filters'),
+                     ('gratings', 'Gratings'),
+                     ('lenses', 'Lenses'),
+                     ('MIRRORS', 'Mirrors'),
+                     ('objective_lenses', 'Objective lenses'),
+                     ('polarizers', 'Polarizers'),
+                     ('prisms', 'Prisms'),
+                     ('reticles', 'Reticles'),
+                     ('windows', 'Windows')
+                     ]
+        }
