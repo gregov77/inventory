@@ -25,16 +25,9 @@ coating_choices = [
 ]
 
 choices = {
-    'optics':[('beamsplitters', 'Beamsplitters'),
-                     ('diffusers', 'Diffusers'),
-                     ('filters', 'Filters'),
-                     ('gratings', 'Gratings'),
-                     ('lenses', 'Lenses'),
-                     ('MIRRORS', 'Mirrors'),
-                     ('objective_lenses', 'Objective lenses'),
-                     ('polarizers', 'Polarizers'),
-                     ('prisms', 'Prisms'),
-                     ('reticles', 'Reticles'),
-                     ('windows', 'Windows')
-                     ]
+    'choose a type':'choose a subtype',
+    'optics':['beamsplitters', 'diffusers', 'filters',
+              'gratings', 'lenses', 'mirrors', 'objective lenses',
+              'polarizers', 'prisms', 'reticles', 'windows'
+             ]           
         }

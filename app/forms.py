@@ -54,12 +54,14 @@ class SearchInventoryForm(FlaskForm):
     '''
         Class defining the search form for the searchItem page.
     '''
-    search_choices = [('part_number', 'part number'),
-                      ('room', 'room'),
-                      ('location', 'location')]
     
-    searchField = SelectField('Product type:', choices=type_choices)
-    #searchValue = StringField(validators=[DataRequired()])
+    searchField1 = SelectField('', coerce=str, choices=[])
+    searchValue1 = StringField('')
+    searchField2 = SelectField('', coerce=str, choices=[])
+    searchValue2 = StringField('')
+    searchField3 = SelectField('', coerce=str, choices=[])
+    searchValue3 = StringField('')
+    
     submit = SubmitField('Submit')
 
 
