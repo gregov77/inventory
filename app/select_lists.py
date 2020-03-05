@@ -24,7 +24,8 @@ coating_choices = [
     ('uncoated', 'Uncoated')
 ]
 
-choices = {'optics':[('beamsplitters', 'Beamsplitters'),
+choices = {
+    'optics':[('beamsplitters', 'Beamsplitters'),
                      ('diffusers', 'Diffusers'),
                      ('filters', 'Filters'),
                      ('gratings', 'Gratings'),

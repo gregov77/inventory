@@ -16,11 +16,11 @@
 {% block content %}
     <h1>Search item</h1>
 
-    <select id="cars">
-        <option value="volvo">Volvo</option>
-        <option value="saab">Saab</option>
-        <option value="mercedes">Mercedes</option>
-        <option value="audi">Audi</option>
+    <select id="types">
+        <option value="None">Choose a type</option>
+        {% for choice in choices %}
+        <option value="{{ choice }}">{{ choice }}</option>
+        {% endfor %}
     </select>
 
     <span id=result>?</span>
@@ -28,10 +28,10 @@
 
     <script>
         $(document).ready(function(){
-            $("#cars").change(function(){
-                var selectedCar  = $("#cars").val(); 
-                $("#result").text(selectedCar);
+            $("#types").change(function(){
+                var selectedType  = $("#types").val(); 
+                $("#result").text(selectedType);
             });
         });
-        </script>    
+    </script>    
 {% endblock %}

@@ -7,7 +7,7 @@ from .forms import (NewTypeForm, SearchedItemForm, SearchedItemListForm, StoreFo
 from .models import InStock
 from bson import ObjectId
 import json
-from .select_lists import optics_choices
+from .select_lists import optics_choices, choices
 from .func_helpers import (get_products_and_stocks, get_productDict, update_productDict,
                            set_roomList, set_storageList, save_room, save_storage, delete_room,
                            delete_storage)
@@ -122,7 +122,7 @@ def searchInventory():
         return redirect(url_for('inventory', query=query))
 
     return render_template('searchInventory.html', title='Search inventory',
-                           form=form)
+                           form=form, choices=choices)
 
 
 @current_app.route('/inventory', methods = ['GET', 'POST'])
