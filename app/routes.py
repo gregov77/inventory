@@ -262,3 +262,8 @@ def locations():
         return redirect(url_for('locations', roomDefault=form.roomList.data))
     
     return render_template('locations.html', title='Locations', form=form)
+
+
+@current_app.route('/searchfield')
+def searchfield():
+    return 0

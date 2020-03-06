@@ -45,8 +45,12 @@
     
     <script>
         $(document).ready(function(){
-            $("#types").change(function(){
-
+            $("#subtypes").change(function(){
+                $.get('/price',function(data) {
+                // here, we have the data object returned by 'price' endpoint
+                // you can access its attributes as a regular JSON object
+                document.getElementById("p1").innerHTML = data.value;
+                });
             });
         });
     </script>
