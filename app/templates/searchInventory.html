@@ -46,11 +46,20 @@
     <script>
         $(document).ready(function(){
             $("#subtypes").change(function(){
-                $.get('/price',function(data) {
-                // here, we have the data object returned by 'price' endpoint
-                // you can access its attributes as a regular JSON object
-                document.getElementById("p1").innerHTML = data.value;
-                });
+                $(".search").empty().append($('<option/>', { 
+                            value: 'test',
+                            text : 'test' 
+                            }));
+            //     var selection = $("#subtypes").val();
+            //     $.post(
+            //         '/get_searchfield',
+            //         {selection=selection}
+            //         ).done(function (result) {
+            //             $(".search").empty().append($('<option/>', { 
+            //                 value: result,
+            //                 text : result 
+            //                 }));
+            //          });
             });
         });
     </script>

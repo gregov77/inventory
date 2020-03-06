@@ -264,6 +264,8 @@ def locations():
     return render_template('locations.html', title='Locations', form=form)
 
 
-@current_app.route('/searchfield')
-def searchfield():
-    return 0
+@current_app.route('/get_searchfield', methods=['GET', 'POST'])
+def get_searchfield():
+    selection = request.form.get('selection')
+    print(selection)
+    return jsonify(result=selection)
