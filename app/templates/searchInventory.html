@@ -2,25 +2,15 @@
 
 {% block content %}
     <h1>Search item</h1>
+    <form method='POST'>
+        {{ form.searchType(id='types') }}
+        {{ form.searchSubtype(id='subtypes') }} <br>
+        {{ form.searchField1(class='search') }} {{ form.searchValue1 }}<br>
+        {{ form.searchField2(class='search') }} {{ form.searchValue2 }}<br>
+        {{ form.searchField3(class='search') }} {{ form.searchValue3 }}<br>
+        {{ form.submit }}
+    </form>
 
-    <select id="types">
-        {% for choice in choices %}
-        <option value="{{ choice }}">{{ choice }}</option>
-        {% endfor %}
-    </select>
-    <select id="subtypes">
-        <option value="None">{{ choices['choose a type'] }}</option>
-    </select>
-
-    <div>
-        <form method='POST'>
-            {{ form.searchField1(class='search') }} {{ form.searchValue1 }}<br>
-            {{ form.searchField2(class='search') }} {{ form.searchValue2 }}<br>
-            {{ form.searchField3(class='search') }} {{ form.searchValue3 }}<br>
-            {{ form.submit }}
-        </form>
-
-    </div>
 
 
     <script>
@@ -30,7 +20,7 @@
                 var selectedType  = $("#types").val(); 
                 $('#subtypes').empty();
                 $('#subtypes').append($('<option/>', { 
-                    value: 'choose a subtype',
+                    value: 'None',
                     text : 'choose a subtype' 
                     }));
                 $.each(JSON.parse(jsonchoices)[selectedType], function (index, value) {
@@ -46,20 +36,17 @@
     <script>
         $(document).ready(function(){
             $("#subtypes").change(function(){
-                $(".search").empty().append($('<option/>', { 
-                            value: 'test',
-                            text : 'test' 
+                $.getJSON('/get_searchfield', {
+				  selection: $("#subtypes").val(),
+				}, function(data) {
+                    $(".search").empty();
+                    $.each(data.result, function(i, value) {
+                        $(".search").append($('<option/>', { 
+                            value: value,
+                            text : value 
                             }));
-            //     var selection = $("#subtypes").val();
-            //     $.post(
-            //         '/get_searchfield',
-            //         {selection=selection}
-            //         ).done(function (result) {
-            //             $(".search").empty().append($('<option/>', { 
-            //                 value: result,
-            //                 text : result 
-            //                 }));
-            //          });
+                        });
+				});
             });
         });
     </script>

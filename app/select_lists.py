@@ -9,7 +9,7 @@ optics_choices = [
     ('filters', 'Filters'),
     ('gratings', 'Gratings'),
     ('lenses', 'Lenses'),
-    ('MIRRORS', 'Mirrors'),
+    ('mirrors', 'Mirrors'),
     ('objective_lenses', 'Objective lenses'),
     ('polarizers', 'Polarizers'),
     ('prisms', 'Prisms'),
@@ -26,8 +26,13 @@ coating_choices = [
 
 choices = {
     'choose a type':'choose a subtype',
-    'optics':['beamsplitters', 'diffusers', 'filters',
-              'gratings', 'lenses', 'mirrors', 'objective lenses',
-              'polarizers', 'prisms', 'reticles', 'windows'
+    'optics':['Beamsplitters', 'Diffusers', 'Filters',
+              'Gratings', 'Lenses', 'Mirrors', 'Objective lenses',
+              'Polarizers', 'Prisms', 'Reticles', 'Windows'
              ]           
         }
+
+search_fields = {
+    'base': {'manufacturer':'Manufacturer', 'part_number':'Part number', 'description':'Description'},
+    'mirrors' : {'diameter':'Diameter', 'coating':'Coating', 'curvature':'Curvature'}
+}

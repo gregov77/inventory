@@ -7,7 +7,7 @@ from .forms import (NewTypeForm, SearchedItemForm, SearchedItemListForm, StoreFo
 from .models import InStock
 from bson import ObjectId
 import json
-from .select_lists import optics_choices, choices
+from .select_lists import optics_choices, choices, search_fields
 from .func_helpers import (get_products_and_stocks, get_productDict, update_productDict,
                            set_roomList, set_storageList, save_room, save_storage, delete_room,
                            delete_storage)
@@ -107,19 +107,22 @@ def updateItem(itemId):
 @current_app.route('/inventory/search', methods = ['GET', 'POST'])
 def searchInventory():
     form = SearchInventoryForm()
-    if form.validate_on_submit():
-        if form.searchField.data=='part_number':
-            value = (form.searchValue.data).upper()
-            query = f'{{ "{form.searchField.data}":{{"$regex":".*{value}.*"}} }}'
-            print(query)
-        elif form.searchField.data=='room':
-            value = (form.searchValue.data).upper().replace(' ', '')
-            query = {form.searchField.data:value}
-        else:
-            value = (form.searchValue.data).upper()
-            query = {form.searchField.data:value}
+    if form.is_submitted():
+        subtype = form.searchSubtype.data.upper()
+        searchFields = [form.searchField1.data, form.searchField2.data, form.searchField3.data]
+        searchvalues = [form.searchValues1.data, form.searchValues2.data, form.searchValues3.data]
+        # if form.searchField.data=='part_number':
+        #     value = (form.searchValue.data).upper()
+        #     query = f'{{ "{form.searchField.data}":{{"$regex":".*{value}.*"}} }}'
+        #     print(query)
+        # elif form.searchField.data=='room':
+        #     value = (form.searchValue.data).upper().replace(' ', '')
+        #     query = {form.searchField.data:value}
+        # else:
+        #     value = (form.searchValue.data).upper()
+        #     query = {form.searchField.data:value}
 
-        return redirect(url_for('inventory', query=query))
+        # return redirect(url_for('inventory', query=query))
 
     return render_template('searchInventory.html', title='Search inventory',
                            form=form, choices=choices)
@@ -266,6 +269,10 @@ def locations():
 
 @current_app.route('/get_searchfield', methods=['GET', 'POST'])
 def get_searchfield():
-    selection = request.form.get('selection')
-    print(selection)
-    return jsonify(result=selection)
+    selection = request.args.get('selection').lower()
+    try:
+        dict_fields = dict(search_fields['base'], **search_fields[selection])
+    except KeyError:
+        dict_fields = search_fields['base']
+
+    return jsonify(result=dict_fields)

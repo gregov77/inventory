@@ -3,7 +3,7 @@ from wtforms import (StringField, IntegerField, FloatField, SubmitField,
                      SelectField, HiddenField, FormField, FieldList,
                      TextAreaField, MultipleFileField)
 from wtforms.validators import DataRequired, ValidationError, InputRequired
-from .select_lists import type_choices, optics_choices, coating_choices
+from .select_lists import type_choices, optics_choices, coating_choices, choices
 
 
 class NewTypeForm(FlaskForm):
@@ -54,14 +54,14 @@ class SearchInventoryForm(FlaskForm):
     '''
         Class defining the search form for the searchItem page.
     '''
-    
+    searchType = SelectField('', choices=list(zip(choices.keys(), choices.keys())), validators=[InputRequired()])
+    searchSubtype = SelectField('', choices=[('None', 'choose a subtype')], validators=[InputRequired()])
     searchField1 = SelectField('', coerce=str, choices=[])
     searchValue1 = StringField('')
     searchField2 = SelectField('', coerce=str, choices=[])
     searchValue2 = StringField('')
     searchField3 = SelectField('', coerce=str, choices=[])
     searchValue3 = StringField('')
-    
     submit = SubmitField('Submit')
 
 
