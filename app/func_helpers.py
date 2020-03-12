@@ -3,6 +3,10 @@ import json
 
 formFieldOnly = ['submit', 'csrf_token', 'documentation']
 
+def set_query(fields, values):
+    query = [{f:v} for f, v in zip(fields, values) if v is not None]
+
+
 def get_products_and_stocks(query):
     '''
         return list of queried items from initial search

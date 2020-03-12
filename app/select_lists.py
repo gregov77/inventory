@@ -36,3 +36,7 @@ search_fields = {
     'base': {'manufacturer':'Manufacturer', 'part_number':'Part number', 'description':'Description'},
     'mirrors' : {'diameter':'Diameter', 'coating':'Coating', 'curvature':'Curvature'}
 }
+
+non_str_fields = {
+    'float':['diameter', 'curvature']
+}
