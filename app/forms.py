@@ -1,9 +1,16 @@
 from flask_wtf import FlaskForm
 from wtforms import (StringField, IntegerField, FloatField, SubmitField,
                      SelectField, HiddenField, FormField, FieldList,
-                     TextAreaField, MultipleFileField)
+                     TextAreaField, MultipleFileField, PasswordField)
 from wtforms.validators import DataRequired, ValidationError, InputRequired
 from .select_lists import type_choices, optics_choices, coating_choices, choices
+
+
+class LoginForm(FlaskForm):
+    username = StringField('Username', validators=[DataRequired()])
+    password = PasswordField('Password', validators=[DataRequired()])
+    #remember = BooleanField('Remember Me')
+    submit = SubmitField('Login')
 
 
 class NewTypeForm(FlaskForm):

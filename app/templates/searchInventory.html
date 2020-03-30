@@ -42,7 +42,7 @@
                     $(".search").empty();
                     $.each(data.result, function(i, value) {
                         $(".search").append($('<option/>', { 
-                            value: value,
+                            value: i,
                             text : value 
                             }));
                         });

@@ -1,8 +1,10 @@
 from flask import Flask
 from flask_pymongo import PyMongo
+from flask_login import LoginManager
 
 
 mongo = PyMongo()
+login_manager = LoginManager()
 
 def create_app():
     ''' Initialise the core application.'''
@@ -14,6 +16,7 @@ def create_app():
 
     # Initialise plugins
     mongo.init_app(app)
+    login_manager.init_app(app)
 
     with app.app_context():
         from app import routes

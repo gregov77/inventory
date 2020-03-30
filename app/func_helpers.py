@@ -1,10 +1,25 @@
 from app import mongo
 import json
+from .select_lists import non_str_fields
 
 formFieldOnly = ['submit', 'csrf_token', 'documentation']
 
-def set_query(fields, values):
-    query = [{f:v} for f, v in zip(fields, values) if v is not None]
+def set_query(group, fields, values):
+    query_list = [{'type':group}]
+    for field, value in zip(fields, values):
+        if value!='':
+            if field in non_str_fields['float']:
+                query_list.append({ field:float(value) })
+            elif field == 'part_number':
+                value = value.upper().replace(' ', '')
+                query_list.append({ "part_number":{"$regex":f'.*{value}.*'} })
+            else:
+                value = value.replace(' ','')
+                query_list.append({ field:value })
+
+    query = {'$and':query_list}
+    print(query, flush=True)
+    return f'{query}'
 
 
 def get_products_and_stocks(query):

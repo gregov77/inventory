@@ -2,31 +2,50 @@ from flask import render_template, flash, redirect, url_for, request, send_file
 from flask import current_app, jsonify
 from app import mongo
 import gridfs
-from .forms import (NewTypeForm, SearchedItemForm, SearchedItemListForm, StoreForm,
+from .forms import (LoginForm, NewTypeForm, SearchedItemForm, SearchedItemListForm, StoreForm,
     SearchInventoryForm, NewSubTypeForm, MirrorForm, LocationsForm, formDict)
-from .models import InStock
+from .models import InStock, User
 from bson import ObjectId
 import json
 from .select_lists import optics_choices, choices, search_fields
 from .func_helpers import (get_products_and_stocks, get_productDict, update_productDict,
                            set_roomList, set_storageList, save_room, save_storage, delete_room,
-                           delete_storage)
+                           delete_storage, set_query)
+from flask_login import login_user, current_user, logout_user, login_required
 
 fs = gridfs.GridFS(mongo.db)
 
-@current_app.route('/check', methods = ['GET', 'POST'])
-def check():
-    a = request.args.get('a', 0, type=str)
-    return jsonify(result=a)
 
-
-@current_app.route('/')
-@current_app.route('/index')
+@current_app.route('/', methods = ['GET', 'POST'])
+@current_app.route('/index', methods = ['GET', 'POST'])
 def index():
-    return render_template('base.html')
+    form = LoginForm()
+    if form.validate_on_submit():
+        user_db = mongo.db.user.find_one({'username':form.username.data})
+        #if user and bcrypt.check_password_hash(user.password, form.password.data):
+        if user_db and user_db['password']==form.password.data:
+            user = User(id=user_db['_id'], username=user_db['username'], password=user_db['password'])
+            login_user(user)
+            next_page = request.args.get('next')
+            flash('Login successful', 'success')
+
+            return redirect(next_page) if next_page else redirect(url_for('index'))
+        else:
+            flash('Login Unsuccessful. Please check username and password', 'danger')
+
+    return render_template('login.html', form=form, title='Login')
+
+
+
+@current_app.route("/logout")
+def logout():
+    logout_user()
+    flash('Logout successful', 'success')
+    return redirect(url_for('index'))
 
 
 @current_app.route('/item/new', methods = ['GET', 'POST'])
+@login_required
 def newItem():
     typeform = NewTypeForm()
 
@@ -37,6 +56,7 @@ def newItem():
 
 
 @current_app.route('/item/new/<group>', methods = ['GET', 'POST'])
+@login_required
 def newItemGroup(group):
     subtypeform = NewSubTypeForm()
     if group=='optics':
@@ -50,6 +70,7 @@ def newItemGroup(group):
 
 
 @current_app.route('/item/new/<group>/<subgroup>', methods = ['GET', 'POST'])
+@login_required
 def newItemEntry(group, subgroup):
     form = formDict[subgroup]()
 
@@ -75,6 +96,7 @@ def newItemEntry(group, subgroup):
 
 
 @current_app.route('/item/update/<itemId>', methods= ['GET', 'POST'])
+@login_required
 def updateItem(itemId):
     item = mongo.db.products.find_one({'_id':itemId})
     if 'documentation' in item.keys():
@@ -105,34 +127,28 @@ def updateItem(itemId):
 
 
 @current_app.route('/inventory/search', methods = ['GET', 'POST'])
+@login_required
 def searchInventory():
     form = SearchInventoryForm()
     if form.is_submitted():
         subtype = form.searchSubtype.data.upper()
         searchFields = [form.searchField1.data, form.searchField2.data, form.searchField3.data]
-        searchvalues = [form.searchValues1.data, form.searchValues2.data, form.searchValues3.data]
-        # if form.searchField.data=='part_number':
-        #     value = (form.searchValue.data).upper()
-        #     query = f'{{ "{form.searchField.data}":{{"$regex":".*{value}.*"}} }}'
-        #     print(query)
-        # elif form.searchField.data=='room':
-        #     value = (form.searchValue.data).upper().replace(' ', '')
-        #     query = {form.searchField.data:value}
-        # else:
-        #     value = (form.searchValue.data).upper()
-        #     query = {form.searchField.data:value}
+        searchValues = [form.searchValue1.data, form.searchValue2.data, form.searchValue3.data]
+        query = set_query(subtype, searchFields, searchValues)
 
-        # return redirect(url_for('inventory', query=query))
+        return redirect(url_for('inventory', query=query))
 
     return render_template('searchInventory.html', title='Search inventory',
                            form=form, choices=choices)
 
 
-@current_app.route('/inventory', methods = ['GET', 'POST'])
-def inventory():
+@current_app.route('/inventory/<query>', methods = ['GET', 'POST'])
+@login_required
+def inventory(query):
     form = SearchedItemListForm()
-    query = json.loads(request.args.get('query').replace("'", "\""))
-    products, stocks = get_products_and_stocks(query)
+    print('query', query, flush=True)
+    json_query = json.loads(query.replace("'", "\""))
+    products, stocks = get_products_and_stocks(json_query)
 
     if request.method == 'GET':
         for stock in stocks:
@@ -149,23 +165,24 @@ def inventory():
         for litem, fitem in zip(stocks, form.items):
             quantity = fitem.quantity.data
             if isinstance(quantity, int) and quantity >= 0:
-                query = { '_id': litem['_id'] }
+                local_query = { '_id': litem['_id'] }
                 if quantity == 0:
-                    mongo.db.instock.delete_one(query)
+                    mongo.db.instock.delete_one(local_query)
                     flash(f'Item removed: {litem["_id"]} {fitem.id_.data}.')
                 if litem['quantity']  != quantity:
                     newvalues = { '$set': { 'quantity': quantity } }
-                    mongo.db.instock.update_one(query, newvalues)
+                    mongo.db.instock.update_one(local_query, newvalues)
                     flash(f'Item changed: {litem["_id"]} {quantity}.')
             else:
                 flash(f'Quantity for item {litem["_id"]} should be an integer.')
         
         return redirect(url_for('inventory', query=query))
     
-    return render_template('inventory.html', title='Inventory', form=form, products=products)
+    return render_template('inventory.html', title='Inventory', form=form, products=products, query=query)
 
 
 @current_app.route('/item/view/<itemId>', methods = ['GET', 'POST'])
+@login_required
 def viewItem(itemId):
     product = mongo.db.products.find_one({'_id':itemId})
     id = product.pop('_id')
@@ -173,6 +190,7 @@ def viewItem(itemId):
 
 
 @current_app.route('/item/store/<itemId>', methods=['GET', 'POST'])
+@login_required
 def storeItem(itemId):
     form = StoreForm()
     form.roomSelect.choices = set_roomList()
@@ -194,6 +212,7 @@ def storeItem(itemId):
 
 
 @current_app.route("/uploads/<string:id>")
+@login_required
 def get_upload(id):
     fin = fs.find_one({'_id':ObjectId(id)})
     data = fin.read()
@@ -206,6 +225,7 @@ def get_upload(id):
 
 
 @current_app.route('/delete/<string:itemId>/<string:docId>')
+@login_required
 def delete_document(itemId, docId):
     fs.delete(ObjectId(docId))
     product = mongo.db.products.find_one({'_id':itemId})
@@ -219,6 +239,7 @@ def delete_document(itemId, docId):
  
 
 @current_app.route('/locations/', methods=['GET', 'POST'])
+@login_required
 def locations():
     try:
         form = LocationsForm(roomList=request.args.get('roomDefault'))
@@ -268,6 +289,7 @@ def locations():
 
 
 @current_app.route('/get_searchfield', methods=['GET', 'POST'])
+@login_required
 def get_searchfield():
     selection = request.args.get('selection').lower()
     try:
