@@ -9,6 +9,21 @@ def load_user(user_id):
 
 
 class User():
+    '''
+        Class to define user characteristics.
+
+    Args:
+        id(str, ObjectId): corresponds to user _id in mongoDB database
+        username(str): user name
+        password(str): user password
+
+    Returns:
+        Instance of user:
+        is_active(property): True
+        is_authenticated(property): True
+        is_anonymous(property): False
+        get_id(function): return user id
+    '''
     def __init__(self, id=None, username=None, password=None):
         self.id = id
         self.username = username
@@ -33,16 +48,21 @@ class User():
             raise NotImplementedError('No `id` attribute - override `get_id`')
 
 
-class Product:
-    def __init__(self, dictionary):
-        self.manufacturer = 'init'
-        self.part_number = 'init'
-        for k, v in dictionary.items():
-            setattr(self, k, v)
-        self._id = self.manufacturer[:3]+'-'+self.part_number
-
-
 class InStock:
+    '''
+        Class defining an entry in the inventory stock.
+
+    Args:
+        id_(str, ObjectId): corresponds to stock _id in mongoDB database
+        code(str): string made of the manufacturer and part number values to identify the product 
+        quantity(int): quantity stocked
+        room(str): room in which the products are stocked
+        storage(str): place in which the products are stocked
+
+    Returns:
+        Instance of Instock with extra variable stocked_date(datetime.utcnow() as data/time of entry
+        into the stock.
+    '''
     def __init__(self, id_=None, code=None, quantity=None, 
                  room=None, storage=None):
         self.code = code
@@ -50,7 +70,3 @@ class InStock:
         self.room = room
         self.storage = storage
         self.stocked_date = datetime.utcnow()
-
-
-
-

@@ -3,8 +3,8 @@
 {% block content %}
 <h1>{{ title }}</h1>
 <div>
-    <a href='{{ url_for("updateItem", itemId=id) }}'>Edit</a>
-    <a href='{{ url_for("storeItem", itemId=id) }}'>Store</a>
+    <a href='{{ url_for("updateItem", itemId=id) }}'>Edit</a> | 
+    <a href='{{ url_for("storeItem", itemId=id) }}'>Store</a> | 
     <a href='{{ url_for("inventory", query={"_id":id}) }}'>Check stock</a>
 </div>
 <div>
@@ -25,6 +25,6 @@
     {% endif %}
 </div>
 <div>
-    <a href=#>Delete item</a>
+    <a href='{{ url_for("deleteItem", itemId=id) }}'>Delete item</a>
 </div>
 {% endblock %}

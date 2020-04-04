@@ -3,7 +3,7 @@ from wtforms import (StringField, IntegerField, FloatField, SubmitField,
                      SelectField, HiddenField, FormField, FieldList,
                      TextAreaField, MultipleFileField, PasswordField)
 from wtforms.validators import DataRequired, ValidationError, InputRequired
-from .select_lists import type_choices, optics_choices, coating_choices, choices
+from .select_lists import type_choices, coating_choices, choices
 
 
 class LoginForm(FlaskForm):

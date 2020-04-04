@@ -7,9 +7,9 @@ from .forms import (LoginForm, NewTypeForm, SearchedItemForm, SearchedItemListFo
 from .models import InStock, User
 from bson import ObjectId
 import json
-from .select_lists import optics_choices, choices, search_fields
+from .select_lists import choices, get_search_fields
 from .func_helpers import (get_products_and_stocks, get_productDict, update_productDict,
-                           set_roomList, set_storageList, save_room, save_storage, delete_room,
+                           get_roomList, get_storageList, save_room, save_storage, delete_room,
                            delete_storage, set_query)
 from flask_login import login_user, current_user, logout_user, login_required
 
@@ -36,7 +36,6 @@ def index():
     return render_template('login.html', form=form, title='Login')
 
 
-
 @current_app.route("/logout")
 def logout():
     logout_user()
@@ -44,29 +43,22 @@ def logout():
     return redirect(url_for('index'))
 
 
+@current_app.route('/main', methods = ['GET', 'POST'])
+@login_required
+def main():
+    return render_template('base.html')
+
 @current_app.route('/item/new', methods = ['GET', 'POST'])
 @login_required
 def newItem():
-    typeform = NewTypeForm()
+    form = SearchInventoryForm()
 
-    if typeform.validate_on_submit():
-        return redirect(url_for('newItemGroup', group=typeform.group.data))
+    if form.is_submitted():
+        group = form.searchType.data
+        subgroup = form.searchSubtype.data.upper()
+        return redirect(url_for('newItemEntry', group=group, subgroup=subgroup))
     
-    return render_template('newItem.html', title='Add item', typeform=typeform)
-
-
-@current_app.route('/item/new/<group>', methods = ['GET', 'POST'])
-@login_required
-def newItemGroup(group):
-    subtypeform = NewSubTypeForm()
-    if group=='optics':
-        subtypeform.subgroup.choices = optics_choices
-
-    if subtypeform.validate_on_submit():
-        subgroup = subtypeform.subgroup.data
-        return redirect(url_for('newItemEntry', group=group, subgroup=subgroup))    
-
-    return render_template('newItemGroup.html', title='Add item', group=group, subtypeform=subtypeform)   
+    return render_template('newItem.html', title='Add item', form=form, choices=choices)
 
 
 @current_app.route('/item/new/<group>/<subgroup>', methods = ['GET', 'POST'])
@@ -78,10 +70,10 @@ def newItemEntry(group, subgroup):
         newProduct = get_productDict(subgroup, form.data)
         checkNewProduct = mongo.db.products.find_one({'_id':newProduct['_id']})
         if checkNewProduct:
-            flash('Item already in the database.')
+            flash('Item already in the database.', 'info')
         else:
             docs = request.files.getlist(form.documentation.name)
-            if docs:
+            if docs[0].filename!='':
                 newProduct['documentation'] = dict()
                 for doc in docs:
                     uid = fs.put(doc, filename=doc.filename)
@@ -108,8 +100,7 @@ def updateItem(itemId):
     if form.is_submitted() and request.method=='POST':
         updateDict = update_productDict(itemId, form.data)
         docs = request.files.getlist(form.documentation.name)
-        if docs and docs[0].filename!='':
-            print('there are docs')
+        if docs[0].filename!='':
             if 'documentation' not in item.keys():
                 updateDict['documentation'] = dict()
             else:
@@ -122,8 +113,16 @@ def updateItem(itemId):
                                          {'$set':updateDict}, upsert=True)
         return redirect(url_for('viewItem', itemId=itemId))
 
-    return render_template('updateItem.html', title='Update item',
+    return render_template('updateItem.html', title=f'Update {itemId}',
                            form=form, itemId=itemId, itemDoc=itemDoc)
+
+
+@current_app.route('/item/delete/<itemId>', methods= ['GET', 'POST'])
+@login_required
+def deleteItem(itemId):
+    mongo.db.products.delete_one({'_id':itemId})
+    flash(f'Item {itemId} removed from database.', 'info')
+    return redirect(url_for('main'))
 
 
 @current_app.route('/inventory/search', methods = ['GET', 'POST'])
@@ -186,18 +185,18 @@ def inventory(query):
 def viewItem(itemId):
     product = mongo.db.products.find_one({'_id':itemId})
     id = product.pop('_id')
-    return render_template('viewItem.html', title='Item', product=product, id=id)
+    return render_template('viewItem.html', title=id, product=product, id=id)
 
 
 @current_app.route('/item/store/<itemId>', methods=['GET', 'POST'])
 @login_required
 def storeItem(itemId):
     form = StoreForm()
-    form.roomSelect.choices = set_roomList()
+    form.roomSelect.choices = get_roomList()
     form.storageSelect.choices = [('','')]
 
     if form.is_submitted() and form.roomSubmit.data:
-        form.storageSelect.choices = set_storageList(form.roomSelect.data)
+        form.storageSelect.choices = get_storageList(form.roomSelect.data)
 
     if form.is_submitted() and form.submit.data:
         newStock = InStock(code=itemId,
@@ -245,9 +244,9 @@ def locations():
         form = LocationsForm(roomList=request.args.get('roomDefault'))
     except NameError:
         form = LocationsForm()
-    form.roomList.choices = set_roomList()
+    form.roomList.choices = get_roomList()
     try:
-        form.storageList.choices = set_storageList(request.args.get('roomDefault'))
+        form.storageList.choices = get_storageList(request.args.get('roomDefault'))
     except KeyError:
         form.storageList.choices = [('','')]
     
@@ -293,8 +292,8 @@ def locations():
 def get_searchfield():
     selection = request.args.get('selection').lower()
     try:
-        dict_fields = dict(search_fields['base'], **search_fields[selection])
+        dict_fields = dict(get_search_fields['base'], **get_search_fields[selection])
     except KeyError:
-        dict_fields = search_fields['base']
+        dict_fields = get_search_fields['base']
 
     return jsonify(result=dict_fields)

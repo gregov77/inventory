@@ -2,8 +2,30 @@
 
 {% block content %}
     <h1>{{ title }}</h1>
-    <form action="" method="post">
-        {{ typeform.hidden_tag() }}
-        <p>{{ typeform.group.label }} {{ typeform.group }} {{ typeform.submit() }}</p>
+    <form method='POST'>
+        {{ form.searchType(id='types') }} <br>
+        {{ form.searchSubtype(id='subtypes') }} <br>
+        {{ form.submit }}
     </form>
+
+
+    <script>
+        $(document).ready(function(){
+            $("#types").change(function(){
+                var jsonchoices = '{{choices|tojson|safe}}';
+                var selectedType  = $("#types").val(); 
+                $('#subtypes').empty();
+                $('#subtypes').append($('<option/>', { 
+                    value: 'None',
+                    text : 'choose a subtype' 
+                    }));
+                $.each(JSON.parse(jsonchoices)[selectedType], function (index, value) {
+                    $('#subtypes').append($('<option/>', { 
+                    value: value,
+                    text : value 
+                    }));
+                });
+            });
+        });
+    </script>
 {% endblock %}

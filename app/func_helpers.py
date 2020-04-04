@@ -5,6 +5,18 @@ from .select_lists import non_str_fields
 formFieldOnly = ['submit', 'csrf_token', 'documentation']
 
 def set_query(group, fields, values):
+    '''
+        Function creating the query used to search the database.
+        Arguments are obtained from the SearchInventoryForm form from the searchInventory route.
+
+    Args:
+        group(str): group to which the product belong (mirror, window, stage, etc.)
+        fields(str): search fields (linked from database keys) from select list
+        values(str): search values entered by the user in teh SearchInventoryForm form
+    
+    Returns:
+        query(str): query for mongoDB in string form.
+    '''
     query_list = [{'type':group}]
     for field, value in zip(fields, values):
         if value!='':
@@ -18,17 +30,16 @@ def set_query(group, fields, values):
                 query_list.append({ field:value })
 
     query = {'$and':query_list}
-    print(query, flush=True)
     return f'{query}'
 
 
 def get_products_and_stocks(query):
     '''
-        return list of queried items from initial search
-        in the searchItem view.
+        Function returning list of queried products and stocks from initial search
+        in the searchInventory view.
 
     Args:
-        query(dict): dictionnary returned by the searchItem view as query
+        query(dict): dictionnary from the query string returned by the set_query function
     
     Returns:
         products(list): list of product documents (as dict) matching the query
@@ -38,6 +49,7 @@ def get_products_and_stocks(query):
     products = [product for product in productList]
     distinctProductId = list({product['_id'] for product in products})
     stockQuery = {'code':{'$in':distinctProductId}}
+    # Stock list sorted by _id values to get same order on each call (for updates)
     stockList = mongo.db.instock.find(stockQuery).sort('_id')
     stocks = [stock for stock in stockList]    
     
@@ -46,32 +58,33 @@ def get_products_and_stocks(query):
 
 def get_productDict(subgroup, dict_):
     '''
-        Produce a dictionnary used to instantiate a Product.
+        Function returning a dictionnary used to instantiate a Product.
 
     Args:
-        subgroup(str): subtype of object as string
-        dict_(dict): dictionnary of keys/values from form data
+        subgroup(str): subtype of object as string (mirror, window, stage, etc.)
+        dict_(dict): dictionnary of keys/values from formDict data from newItemEntry route
     
     Returns:
         productDict(dict): dictionnary for object instantiation
     '''
     productDict = dict(type=subgroup.upper())
     for k, v in dict_.items():
-        if k not in formFieldOnly+'description':
+        if k not in formFieldOnly+['description']:
             if isinstance(v, str): v = v.upper() 
             productDict[k] = v
     productDict['_id'] = productDict['manufacturer']+'-'+productDict['part_number']
+    productDict['description'] = dict_['description']
 
     return productDict
 
 
 def update_productDict(productId, dataDict):
     '''
-        Produce a dictionnary used to update a Product.
+        Function returning a dictionnary of keys/values to update in a product.
 
     Args:
-        product(str): key _id of the product to update
-        dataDict(dict): dictionnary of keys/values from form data
+        productId(str): key _id of the product to update
+        dataDict(dict): dictionnary of keys/values from formDict data
     
     Returns:
         productDict(dict): dictionnary of changed keys/values
@@ -86,13 +99,14 @@ def update_productDict(productId, dataDict):
     return productDict
 
 
-def set_roomList():
+def get_roomList():
     '''
-        Produce a list of tuples to fill Locations.roomList.choices
+        Function returning a list of tuples to fill Locations.roomList.choices
         from file locations.json.
 
     Args:
-     
+        No argument
+        
     Returns:
         room_list(list): list of rooms as [(room_i, room_i), ...]
     '''
@@ -103,9 +117,9 @@ def set_roomList():
     return room_list
 
 
-def set_storageList(room):
+def get_storageList(room):
     '''
-        Produce a list of tuples to fill Locations.storageList.choices
+        Function returning a list of tuples to fill Locations.storageList.choices
         from file locations.json.
 
     Args:
@@ -123,13 +137,13 @@ def set_storageList(room):
 
 def save_room(room):
     '''
-        Add room name to locations.json
+        Function that adds room name to locations.json
 
     Args:
         room(str): string returned from Locations.room.data
     
     Returns:
-        room(str): cleaned room arg with upper letter an removed white spaces
+        room(str): cleaned room arg with upper letter and removed white spaces
     '''
     with open('app/locations.json', 'r') as fd:
         locations = json.load(fd)
@@ -144,7 +158,7 @@ def save_room(room):
 
 def save_storage(room, storage):
     '''
-        Add storage name to locations.json
+        Function that adds storage name to locations.json
 
     Args:
         room(str): string returned from Locations.roomList.data
@@ -167,13 +181,13 @@ def save_storage(room, storage):
 
 def delete_room(room):
     '''
-        Delete room name from locations.json
+        Function that deletes room name from locations.json
 
     Args:
         room(str): string returned from Locations.roomList.data
     
     Returns:
-
+        No return
     '''
     with open('app/locations.json', 'r') as fd:
         locations = json.load(fd)
@@ -186,14 +200,14 @@ def delete_room(room):
 
 def delete_storage(room, storage):
     '''
-        Delete storage name from locations.json
+        Function that deletes storage name from locations.json
 
     Args:
         room(str): string returned from Locations.roomList.data
         storage(str): string returned from Locations.storageList.data
     
     Returns:
-
+        No return
     '''
     with open('app/locations.json', 'r') as fd:
         locations = json.load(fd)

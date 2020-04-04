@@ -1,0 +1,452 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Welcome to ScapaLog’s documentation! &#8212; ScapaLog 0.0.1 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="welcome-to-scapalog-s-documentation">
+<h1>Welcome to ScapaLog’s documentation!<a class="headerlink" href="#welcome-to-scapalog-s-documentation" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+</div>
+<div class="section" id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
+</div>
+<div class="section" id="module-app">
+<span id="scapalog-main"></span><h1>ScapaLog main<a class="headerlink" href="#module-app" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="app.create_app">
+<code class="sig-prename descclassname">app.</code><code class="sig-name descname">create_app</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.create_app" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialise the core application.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-app.forms">
+<span id="forms"></span><h1>Forms<a class="headerlink" href="#module-app.forms" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="app.forms.LocationsForm">
+<em class="property">class </em><code class="sig-prename descclassname">app.forms.</code><code class="sig-name descname">LocationsForm</code><span class="sig-paren">(</span><em class="sig-param">formdata=&lt;object object&gt;</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#app.forms.LocationsForm" title="Permalink to this definition">¶</a></dt>
+<dd><p>form to add/remove rooms and locations.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="app.forms.LoginForm">
+<em class="property">class </em><code class="sig-prename descclassname">app.forms.</code><code class="sig-name descname">LoginForm</code><span class="sig-paren">(</span><em class="sig-param">formdata=&lt;object object&gt;</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#app.forms.LoginForm" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="app.forms.MirrorForm">
+<em class="property">class </em><code class="sig-prename descclassname">app.forms.</code><code class="sig-name descname">MirrorForm</code><span class="sig-paren">(</span><em class="sig-param">formdata=&lt;object object&gt;</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#app.forms.MirrorForm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parent form for all products.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="app.forms.NewSubTypeForm">
+<em class="property">class </em><code class="sig-prename descclassname">app.forms.</code><code class="sig-name descname">NewSubTypeForm</code><span class="sig-paren">(</span><em class="sig-param">formdata=&lt;object object&gt;</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#app.forms.NewSubTypeForm" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>Form displayed to choose subtype of new item to add to database from
+the newItem page.</p>
+</div></blockquote>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>SelectField uses dynamic choices depending on the initial type of product.</p>
+</div>
+</dd></dl>
+
+<dl class="class">
+<dt id="app.forms.NewTypeForm">
+<em class="property">class </em><code class="sig-prename descclassname">app.forms.</code><code class="sig-name descname">NewTypeForm</code><span class="sig-paren">(</span><em class="sig-param">formdata=&lt;object object&gt;</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#app.forms.NewTypeForm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Form displayed to choose type of new item to add to database from
+the newItem page.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="app.forms.ProductForm">
+<em class="property">class </em><code class="sig-prename descclassname">app.forms.</code><code class="sig-name descname">ProductForm</code><span class="sig-paren">(</span><em class="sig-param">formdata=&lt;object object&gt;</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#app.forms.ProductForm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parent form for all products.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="app.forms.SearchInventoryForm">
+<em class="property">class </em><code class="sig-prename descclassname">app.forms.</code><code class="sig-name descname">SearchInventoryForm</code><span class="sig-paren">(</span><em class="sig-param">formdata=&lt;object object&gt;</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#app.forms.SearchInventoryForm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class defining the search form for the searchItem page.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="app.forms.SearchedItemForm">
+<em class="property">class </em><code class="sig-prename descclassname">app.forms.</code><code class="sig-name descname">SearchedItemForm</code><span class="sig-paren">(</span><em class="sig-param">formdata=&lt;object object&gt;</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#app.forms.SearchedItemForm" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>Generic form for a single item returned from a search
+in the searchItem page.</p>
+</div></blockquote>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This class forms the building block of the class SearchedItemListForm.</p>
+</div>
+</dd></dl>
+
+<dl class="class">
+<dt id="app.forms.SearchedItemListForm">
+<em class="property">class </em><code class="sig-prename descclassname">app.forms.</code><code class="sig-name descname">SearchedItemListForm</code><span class="sig-paren">(</span><em class="sig-param">formdata=&lt;object object&gt;</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#app.forms.SearchedItemListForm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Form consisting of a list of SearchItemForm. This is the form
+that is passed to the searchItem page to display the found
+items.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="app.forms.StoreForm">
+<em class="property">class </em><code class="sig-prename descclassname">app.forms.</code><code class="sig-name descname">StoreForm</code><span class="sig-paren">(</span><em class="sig-param">formdata=&lt;object object&gt;</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#app.forms.StoreForm" title="Permalink to this definition">¶</a></dt>
+<dd><p>form to add item to inventory</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-app.models">
+<span id="models"></span><h1>Models<a class="headerlink" href="#module-app.models" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="app.models.InStock">
+<em class="property">class </em><code class="sig-prename descclassname">app.models.</code><code class="sig-name descname">InStock</code><span class="sig-paren">(</span><em class="sig-param">id_=None</em>, <em class="sig-param">code=None</em>, <em class="sig-param">quantity=None</em>, <em class="sig-param">room=None</em>, <em class="sig-param">storage=None</em><span class="sig-paren">)</span><a class="headerlink" href="#app.models.InStock" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>Class defining an entry in the inventory stock.</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id_</strong> (<em>str</em><em>, </em><em>ObjectId</em>) – corresponds to stock _id in mongoDB database</p></li>
+<li><p><strong>code</strong> (<em>str</em>) – string made of the manufacturer and part number values to identify the product</p></li>
+<li><p><strong>quantity</strong> (<em>int</em>) – quantity stocked</p></li>
+<li><p><strong>room</strong> (<em>str</em>) – room in which the products are stocked</p></li>
+<li><p><strong>storage</strong> (<em>str</em>) – place in which the products are stocked</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Instance of Instock with extra variable stocked_date(datetime.utcnow() as data/time of entry
+into the stock.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="app.models.User">
+<em class="property">class </em><code class="sig-prename descclassname">app.models.</code><code class="sig-name descname">User</code><span class="sig-paren">(</span><em class="sig-param">id=None</em>, <em class="sig-param">username=None</em>, <em class="sig-param">password=None</em><span class="sig-paren">)</span><a class="headerlink" href="#app.models.User" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>Class to define user characteristics.</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> (<em>str</em><em>, </em><em>ObjectId</em>) – corresponds to user _id in mongoDB database</p></li>
+<li><p><strong>username</strong> (<em>str</em>) – user name</p></li>
+<li><p><strong>password</strong> (<em>str</em>) – user password</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>is_active(property): True
+is_authenticated(property): True
+is_anonymous(property): False
+get_id(function): return user id</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Instance of user</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-app.func_helpers">
+<span id="function-helpers"></span><h1>Function helpers<a class="headerlink" href="#module-app.func_helpers" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="app.func_helpers.delete_room">
+<code class="sig-prename descclassname">app.func_helpers.</code><code class="sig-name descname">delete_room</code><span class="sig-paren">(</span><em class="sig-param">room</em><span class="sig-paren">)</span><a class="headerlink" href="#app.func_helpers.delete_room" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>Delete room name from locations.json</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>room</strong> (<em>str</em>) – string returned from Locations.roomList.data</p>
+</dd>
+</dl>
+<p>Returns:</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="app.func_helpers.delete_storage">
+<code class="sig-prename descclassname">app.func_helpers.</code><code class="sig-name descname">delete_storage</code><span class="sig-paren">(</span><em class="sig-param">room</em>, <em class="sig-param">storage</em><span class="sig-paren">)</span><a class="headerlink" href="#app.func_helpers.delete_storage" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>Delete storage name from locations.json</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>room</strong> (<em>str</em>) – string returned from Locations.roomList.data</p></li>
+<li><p><strong>storage</strong> (<em>str</em>) – string returned from Locations.storageList.data</p></li>
+</ul>
+</dd>
+</dl>
+<p>Returns:</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="app.func_helpers.get_productDict">
+<code class="sig-prename descclassname">app.func_helpers.</code><code class="sig-name descname">get_productDict</code><span class="sig-paren">(</span><em class="sig-param">subgroup</em>, <em class="sig-param">dict_</em><span class="sig-paren">)</span><a class="headerlink" href="#app.func_helpers.get_productDict" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>Produce a dictionnary used to instantiate a Product.</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>subgroup</strong> (<em>str</em>) – subtype of object as string</p></li>
+<li><p><strong>dict_</strong> (<em>dict</em>) – dictionnary of keys/values from form data</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>dictionnary for object instantiation</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>productDict(dict)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="app.func_helpers.get_products_and_stocks">
+<code class="sig-prename descclassname">app.func_helpers.</code><code class="sig-name descname">get_products_and_stocks</code><span class="sig-paren">(</span><em class="sig-param">query</em><span class="sig-paren">)</span><a class="headerlink" href="#app.func_helpers.get_products_and_stocks" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>return list of queried items from initial search
+in the searchItem view.</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>query</strong> (<em>dict</em>) – dictionnary returned by the searchItem view as query</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>list of product documents (as dict) matching the query
+stocks(list): list of stocks (as dict) matching the query</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>products(list)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="app.func_helpers.save_room">
+<code class="sig-prename descclassname">app.func_helpers.</code><code class="sig-name descname">save_room</code><span class="sig-paren">(</span><em class="sig-param">room</em><span class="sig-paren">)</span><a class="headerlink" href="#app.func_helpers.save_room" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>Add room name to locations.json</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>room</strong> (<em>str</em>) – string returned from Locations.room.data</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>cleaned room arg with upper letter an removed white spaces</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>room(str)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="app.func_helpers.save_storage">
+<code class="sig-prename descclassname">app.func_helpers.</code><code class="sig-name descname">save_storage</code><span class="sig-paren">(</span><em class="sig-param">room</em>, <em class="sig-param">storage</em><span class="sig-paren">)</span><a class="headerlink" href="#app.func_helpers.save_storage" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>Add storage name to locations.json</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>room</strong> (<em>str</em>) – string returned from Locations.roomList.data</p></li>
+<li><p><strong>storage</strong> (<em>str</em>) – string returned from Locations.storage.data</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>cleaned storage name</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>storage(str)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="app.func_helpers.set_query">
+<code class="sig-prename descclassname">app.func_helpers.</code><code class="sig-name descname">set_query</code><span class="sig-paren">(</span><em class="sig-param">group</em>, <em class="sig-param">fields</em>, <em class="sig-param">values</em><span class="sig-paren">)</span><a class="headerlink" href="#app.func_helpers.set_query" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>Function to create the query used to search the database.
+Arguments are obtained from the SearchInventoryForm form from the searchInventory route.</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>group</strong> (<em>str</em>) – group to which the product belong (mirror, window, stage, etc.)</p></li>
+<li><p><strong>fields</strong> (<em>str</em>) – search fields (linked from database keys) from select list</p></li>
+<li><p><strong>values</strong> (<em>str</em>) – search values entered by the user in teh SearchInventoryForm form</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>query for mongoDB in string form.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>query(str)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="app.func_helpers.get_roomList">
+<code class="sig-prename descclassname">app.func_helpers.</code><code class="sig-name descname">get_roomList</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.func_helpers.get_roomList" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>Produce a list of tuples to fill Locations.roomList.choices
+from file locations.json.</p>
+</div></blockquote>
+<p>Args:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>list of rooms as [(room_i, room_i), …]</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>room_list(list)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="app.func_helpers.get_storageList">
+<code class="sig-prename descclassname">app.func_helpers.</code><code class="sig-name descname">get_storageList</code><span class="sig-paren">(</span><em class="sig-param">room</em><span class="sig-paren">)</span><a class="headerlink" href="#app.func_helpers.get_storageList" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>Produce a list of tuples to fill Locations.storageList.choices
+from file locations.json.</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>room</strong> (<em>str</em>) – room name used as key to retrieve storages from that room</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>list of rooms as [(storage_i, storage_i), …]</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>storage_list(list)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="app.func_helpers.update_productDict">
+<code class="sig-prename descclassname">app.func_helpers.</code><code class="sig-name descname">update_productDict</code><span class="sig-paren">(</span><em class="sig-param">productId</em>, <em class="sig-param">dataDict</em><span class="sig-paren">)</span><a class="headerlink" href="#app.func_helpers.update_productDict" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>Produce a dictionnary used to update a Product.</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>product</strong> (<em>str</em>) – key _id of the product to update</p></li>
+<li><p><strong>dataDict</strong> (<em>dict</em>) – dictionnary of keys/values from form data</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>dictionnary of changed keys/values</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>productDict(dict)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="#">ScapaLog</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="#">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Gregory Vieux.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

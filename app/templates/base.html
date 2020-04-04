@@ -11,7 +11,6 @@
         <!-- Optional JavaScript -->
         <!-- jQuery -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-        
 
         {% if title %}
         <title>{{ title }} - SCAPA-inventory</title>
@@ -19,7 +18,9 @@
         <title>SCAPA-inventory</title>
         {% endif %}
     </head>
+
     <body>
+
         <div><img src="/static/scapalog.png" alt="SCAPA logo" height="50">
             <a href='{{ url_for("index") }}'>Home</a> | 
             <a href='{{ url_for("newItem") }}'>New item</a> | 
