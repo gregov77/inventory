@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="content-section">
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">SCAPA Log</legend>
+
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-3">
+                        <a class="btn btn-outline-info" href='{{ url_for("newItem") }}'>New item</a> 
+                    </div>
+                    <div class="col-lg-9">
+                        Create a new Item in the inventory
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-lg-3">
+                        <a class="btn btn-outline-info" href='{{ url_for("searchInventory") }}'>Search inventory</a> 
+                    </div>
+                    <div class="col-lg-9">
+                        Search for existing items in inventory
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-lg-3">
+                        <a class="btn btn-outline-info" href='{{ url_for("locations") }}'>Locations</a>
+                    </div>
+                    <div class="col-lg-9">
+                        Manage rooms and locations where items are stocked
+                    </div>
+                </div>                
+            </div>
+  
+             
+              
+        </fieldset>
+    </div>
+{% endblock %}

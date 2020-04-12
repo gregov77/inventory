@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import (StringField, IntegerField, FloatField, SubmitField,
                      SelectField, HiddenField, FormField, FieldList,
-                     TextAreaField, MultipleFileField, PasswordField)
+                     TextAreaField, MultipleFileField, PasswordField, RadioField)
 from wtforms.validators import DataRequired, ValidationError, InputRequired
 from .select_lists import type_choices, coating_choices, choices
 
@@ -10,7 +10,7 @@ class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
     #remember = BooleanField('Remember Me')
-    submit = SubmitField('Login')
+    submit = SubmitField('Log in')
 
 
 class NewTypeForm(FlaskForm):
@@ -41,7 +41,9 @@ class ProductForm(FlaskForm):
      
     manufacturer = StringField('Manufacturer', validators=[DataRequired()])
     part_number = StringField('Part number', validators=[DataRequired()])
-    price = FloatField('Last price')
+    price = FloatField('Price')
+    currency = RadioField('Currency', choices=[('GBP','£'), ('EUR','€'), ('USD','$')], default='GBP')
+    dimension_unit = RadioField('Dimension unit', choices=[('mm','mm'), ('in','in')], default='mm')
     description = TextAreaField('Description', validators=[DataRequired()])
     documentation = MultipleFileField('Documentation files')
     submit = SubmitField('Submit')
@@ -54,12 +56,13 @@ class MirrorForm(ProductForm):
      
     diameter = FloatField('Diameter', validators=[DataRequired()])
     coating = SelectField('Coating', choices=coating_choices, validators=[DataRequired()])
-    curvature = FloatField('Curvature', validators=[DataRequired()])
+    focal_length = FloatField('Focal length')
     
 
 class SearchInventoryForm(FlaskForm):
     '''
         Class defining the search form for the searchItem page.
+        Class also used for the newItem page.
     '''
     searchType = SelectField('', choices=list(zip(choices.keys(), choices.keys())), validators=[InputRequired()])
     searchSubtype = SelectField('', choices=[('None', 'choose a subtype')], validators=[InputRequired()])
@@ -104,12 +107,12 @@ class LocationsForm(FlaskForm):
     '''
     room = StringField('Room')
     addRoom = SubmitField('Add')
-    roomList = SelectField('Room list', coerce=str)
-    viewStorage = SubmitField('View locations')
+    roomList = SelectField('Room', coerce=str)
+    viewStorage = SubmitField('View room storage')
     delete_room = SubmitField('Delete')
-    storage = StringField('Storage')
+    storage = StringField('Add storage')
     addStorage = SubmitField('Add')
-    storageList = SelectField('Storage list', coerce=str)
+    storageList = SelectField('Remove storage', coerce=str)
     delete_storage = SubmitField('Delete')
 
 

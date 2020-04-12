@@ -1,37 +1,53 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>{{ title }}</h1>
-<h2>List of items</h2>
-{% for product in products %}
-<a href="{{ url_for('viewItem', itemId=product['_id']) }}">{{ product['_id'] }}</a> {{ product['type'] }} <br>
-{% endfor %}
+  <div class='content-section'>
+    <fieldset class="form-group">
+      <legend class="border-bottom mb-4">Items list</legend>
+      {% for product in products %}
+        <div class="form-group row">
+          <div class='col-lg-3'>
+            <a href="{{ url_for('viewItem', itemId=product['_id']) }}">{{ product['_id'] }}</a>
+          </div>
+          <div class="col-lg-9">
+            {{ product['type'] }}
+          </div>
+        </div>
+      {% endfor %}
+    </fieldset>
 
-<h2>Stock</h2>
-{% if form.items %}
-    <form action="{{ url_for('inventory', query=query)}}" method="post" novalidate>
-      {{ form.hidden_tag() }}
-      <table>
-          <tr>
-            <th>Code</th>
-            <th>Room</th>
-            <th>Storage</th>
-            <th>Date stocked</th>
-            <th>Quantity</th>
-          </tr>
-          {% for item in form.items %}
-          {{ item.hidden_tag() }}
-          {{ item.id_}}
-          <tr>
-            <td><b>{{ item.code.data }}</b></td>
-            <td>{{ item.room.data }}</td>
-            <td>{{ item.storage.data }}</td>
-            <td>{{ item.stocked_date.data }}</td>
-            <td>{{ item.quantity }}</td>
-          </tr>
-          {% endfor %}
-      </table>
-      {{ form.submit() }}
-    </form>
-    {% endif %}
+    <fieldset class="form-group">
+      <legend class="border-bottom mb-4">Stock</legend>
+      {% if form.items %}
+        <form action="{{ url_for('inventory', query=query)}}" method="post" novalidate>
+          {{ form.hidden_tag() }}
+          <table class="table table-hover">
+            <thead class='thead-light'>
+              <tr>
+                <th scope='col'>Code</th>
+                <th scope='col'>Room</th>
+                <th scope='col'>Storage</th>
+                <th scope='col'>Date stocked</th>
+                <th scope='col'>Quantity</th>
+              </tr>
+            </thead>
+              {% for item in form.items %}
+              {{ item.hidden_tag() }}
+              {{ item.id_}}
+            <tbody>
+              <tr>
+                <th scope='row' class='align-middle'>{{ item.code.data }}</th>
+                <td class='align-middle'>{{ item.room.data }}</td>
+                <td class='align-middle'>{{ item.storage.data }}</td>
+                <td class='align-middle'>{{ item.stocked_date.data }}</td>
+                <td class='align-middle'>{{ item.quantity(class="form-control") }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          {{ form.submit(class='btn btn-outline-info') }}
+        </form>
+      {% endif %}
+    </fieldset>
+  </div>
 {% endblock %}

@@ -189,21 +189,23 @@ get_id(function): return user id</p>
 <dt id="app.func_helpers.delete_room">
 <code class="sig-prename descclassname">app.func_helpers.</code><code class="sig-name descname">delete_room</code><span class="sig-paren">(</span><em class="sig-param">room</em><span class="sig-paren">)</span><a class="headerlink" href="#app.func_helpers.delete_room" title="Permalink to this definition">¶</a></dt>
 <dd><blockquote>
-<div><p>Delete room name from locations.json</p>
+<div><p>Function that deletes room name from locations.json</p>
 </div></blockquote>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>room</strong> (<em>str</em>) – string returned from Locations.roomList.data</p>
 </dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>No return</p>
+</dd>
 </dl>
-<p>Returns:</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="app.func_helpers.delete_storage">
 <code class="sig-prename descclassname">app.func_helpers.</code><code class="sig-name descname">delete_storage</code><span class="sig-paren">(</span><em class="sig-param">room</em>, <em class="sig-param">storage</em><span class="sig-paren">)</span><a class="headerlink" href="#app.func_helpers.delete_storage" title="Permalink to this definition">¶</a></dt>
 <dd><blockquote>
-<div><p>Delete storage name from locations.json</p>
+<div><p>Function that deletes storage name from locations.json</p>
 </div></blockquote>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -212,21 +214,23 @@ get_id(function): return user id</p>
 <li><p><strong>storage</strong> (<em>str</em>) – string returned from Locations.storageList.data</p></li>
 </ul>
 </dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>No return</p>
+</dd>
 </dl>
-<p>Returns:</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="app.func_helpers.get_productDict">
 <code class="sig-prename descclassname">app.func_helpers.</code><code class="sig-name descname">get_productDict</code><span class="sig-paren">(</span><em class="sig-param">subgroup</em>, <em class="sig-param">dict_</em><span class="sig-paren">)</span><a class="headerlink" href="#app.func_helpers.get_productDict" title="Permalink to this definition">¶</a></dt>
 <dd><blockquote>
-<div><p>Produce a dictionnary used to instantiate a Product.</p>
+<div><p>Function returning a dictionnary used to instantiate a Product.</p>
 </div></blockquote>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>subgroup</strong> (<em>str</em>) – subtype of object as string</p></li>
-<li><p><strong>dict_</strong> (<em>dict</em>) – dictionnary of keys/values from form data</p></li>
+<li><p><strong>subgroup</strong> (<em>str</em>) – subtype of object as string (mirror, window, stage, etc.)</p></li>
+<li><p><strong>dict_</strong> (<em>dict</em>) – dictionnary of keys/values from formDict data from newItemEntry route</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -242,12 +246,12 @@ get_id(function): return user id</p>
 <dt id="app.func_helpers.get_products_and_stocks">
 <code class="sig-prename descclassname">app.func_helpers.</code><code class="sig-name descname">get_products_and_stocks</code><span class="sig-paren">(</span><em class="sig-param">query</em><span class="sig-paren">)</span><a class="headerlink" href="#app.func_helpers.get_products_and_stocks" title="Permalink to this definition">¶</a></dt>
 <dd><blockquote>
-<div><p>return list of queried items from initial search
-in the searchItem view.</p>
+<div><p>Function returning list of queried products and stocks from initial search
+in the searchInventory view.</p>
 </div></blockquote>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>query</strong> (<em>dict</em>) – dictionnary returned by the searchItem view as query</p>
+<dd class="field-odd"><p><strong>query</strong> (<em>dict</em>) – dictionnary from the query string returned by the set_query function</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>list of product documents (as dict) matching the query
@@ -260,17 +264,57 @@ stocks(list): list of stocks (as dict) matching the query</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="app.func_helpers.get_roomList">
+<code class="sig-prename descclassname">app.func_helpers.</code><code class="sig-name descname">get_roomList</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.func_helpers.get_roomList" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>Function returning a list of tuples to fill Locations.roomList.choices
+from file locations.json.</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>argument</strong> (<em>No</em>) – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>list of rooms as [(room_i, room_i), …]</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>room_list(list)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="app.func_helpers.get_storageList">
+<code class="sig-prename descclassname">app.func_helpers.</code><code class="sig-name descname">get_storageList</code><span class="sig-paren">(</span><em class="sig-param">room</em><span class="sig-paren">)</span><a class="headerlink" href="#app.func_helpers.get_storageList" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>Function returning a list of tuples to fill Locations.storageList.choices
+from file locations.json.</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>room</strong> (<em>str</em>) – room name used as key to retrieve storages from that room</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>list of rooms as [(storage_i, storage_i), …]</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>storage_list(list)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
 <dt id="app.func_helpers.save_room">
 <code class="sig-prename descclassname">app.func_helpers.</code><code class="sig-name descname">save_room</code><span class="sig-paren">(</span><em class="sig-param">room</em><span class="sig-paren">)</span><a class="headerlink" href="#app.func_helpers.save_room" title="Permalink to this definition">¶</a></dt>
 <dd><blockquote>
-<div><p>Add room name to locations.json</p>
+<div><p>Function that adds room name to locations.json</p>
 </div></blockquote>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>room</strong> (<em>str</em>) – string returned from Locations.room.data</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>cleaned room arg with upper letter an removed white spaces</p>
+<dd class="field-even"><p>cleaned room arg with upper letter and removed white spaces</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>room(str)</p>
@@ -282,7 +326,7 @@ stocks(list): list of stocks (as dict) matching the query</p>
 <dt id="app.func_helpers.save_storage">
 <code class="sig-prename descclassname">app.func_helpers.</code><code class="sig-name descname">save_storage</code><span class="sig-paren">(</span><em class="sig-param">room</em>, <em class="sig-param">storage</em><span class="sig-paren">)</span><a class="headerlink" href="#app.func_helpers.save_storage" title="Permalink to this definition">¶</a></dt>
 <dd><blockquote>
-<div><p>Add storage name to locations.json</p>
+<div><p>Function that adds storage name to locations.json</p>
 </div></blockquote>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -304,7 +348,7 @@ stocks(list): list of stocks (as dict) matching the query</p>
 <dt id="app.func_helpers.set_query">
 <code class="sig-prename descclassname">app.func_helpers.</code><code class="sig-name descname">set_query</code><span class="sig-paren">(</span><em class="sig-param">group</em>, <em class="sig-param">fields</em>, <em class="sig-param">values</em><span class="sig-paren">)</span><a class="headerlink" href="#app.func_helpers.set_query" title="Permalink to this definition">¶</a></dt>
 <dd><blockquote>
-<div><p>Function to create the query used to search the database.
+<div><p>Function creating the query used to search the database.
 Arguments are obtained from the SearchInventoryForm form from the searchInventory route.</p>
 </div></blockquote>
 <dl class="field-list simple">
@@ -325,54 +369,16 @@ Arguments are obtained from the SearchInventoryForm form from the searchInventor
 </dd></dl>
 
 <dl class="function">
-<dt id="app.func_helpers.get_roomList">
-<code class="sig-prename descclassname">app.func_helpers.</code><code class="sig-name descname">get_roomList</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.func_helpers.get_roomList" title="Permalink to this definition">¶</a></dt>
-<dd><blockquote>
-<div><p>Produce a list of tuples to fill Locations.roomList.choices
-from file locations.json.</p>
-</div></blockquote>
-<p>Args:</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>list of rooms as [(room_i, room_i), …]</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>room_list(list)</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
-<dt id="app.func_helpers.get_storageList">
-<code class="sig-prename descclassname">app.func_helpers.</code><code class="sig-name descname">get_storageList</code><span class="sig-paren">(</span><em class="sig-param">room</em><span class="sig-paren">)</span><a class="headerlink" href="#app.func_helpers.get_storageList" title="Permalink to this definition">¶</a></dt>
-<dd><blockquote>
-<div><p>Produce a list of tuples to fill Locations.storageList.choices
-from file locations.json.</p>
-</div></blockquote>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>room</strong> (<em>str</em>) – room name used as key to retrieve storages from that room</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>list of rooms as [(storage_i, storage_i), …]</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>storage_list(list)</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
 <dt id="app.func_helpers.update_productDict">
 <code class="sig-prename descclassname">app.func_helpers.</code><code class="sig-name descname">update_productDict</code><span class="sig-paren">(</span><em class="sig-param">productId</em>, <em class="sig-param">dataDict</em><span class="sig-paren">)</span><a class="headerlink" href="#app.func_helpers.update_productDict" title="Permalink to this definition">¶</a></dt>
 <dd><blockquote>
-<div><p>Produce a dictionnary used to update a Product.</p>
+<div><p>Function returning a dictionnary of keys/values to update in a product.</p>
 </div></blockquote>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>product</strong> (<em>str</em>) – key _id of the product to update</p></li>
-<li><p><strong>dataDict</strong> (<em>dict</em>) – dictionnary of keys/values from form data</p></li>
+<li><p><strong>productId</strong> (<em>str</em>) – key _id of the product to update</p></li>
+<li><p><strong>dataDict</strong> (<em>dict</em>) – dictionnary of keys/values from formDict data</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>

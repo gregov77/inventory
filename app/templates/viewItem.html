@@ -1,30 +1,40 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>{{ title }}</h1>
-<div>
-    <a href='{{ url_for("updateItem", itemId=id) }}'>Edit</a> | 
-    <a href='{{ url_for("storeItem", itemId=id) }}'>Store</a> | 
-    <a href='{{ url_for("inventory", query={"_id":id}) }}'>Check stock</a>
-</div>
-<div>
-    {% for k, v in product.items() %}
-        {% if k!='documentation' %}
-            <dt>{{ k }}:</dt> <dd>{{ v }}</dd>
-        {% endif %}
-    {% endfor %}
-</div>
-<div>
-    <dt>Documentation</dt>
-    {% if 'documentation' in product %}
-        {% for k, v in product['documentation'].items() %}
-        <dd><a href='{{ url_for("get_upload", id=k) }}'> {{ v }} </a></dd>
-        {% endfor %}
-    {% else %}
-        <dd>No Documentation</dd>
-    {% endif %}
-</div>
-<div>
-    <a href='{{ url_for("deleteItem", itemId=id) }}'>Delete item</a>
-</div>
+    <div class="content-section">
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">{{ title }}</legend>
+            <div>
+                <a href='{{ url_for("updateItem", itemId=id) }}' class='btn btn-outline-info'>Edit</a>  
+                <a href='{{ url_for("storeItem", itemId=id) }}' class='btn btn-outline-info'>Store</a>  
+                <a href='{{ url_for("inventory", query={"_id":id}) }}' class='btn btn-outline-info'>Check stock</a>
+                <a href='{{ url_for("deleteItem", itemId=id) }}' class='btn btn-outline-danger'>Delete item</a>
+            </div>
+            <br>
+            <div>
+                {% for k, v in product.items() %}
+                    {% if k!='documentation' %}
+                        <div class="form-group row">
+                            <div class='col-lg-2'>
+                                <b>{{ k }}</b>:
+                            </div>
+                            <div class="col-lg-10">
+                                {{ v }}
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            <div>
+                <dt>Documentation</dt>
+                {% if 'documentation' in product %}
+                    {% for k, v in product['documentation'].items() %}
+                    <dd><a href='{{ url_for("get_upload", id=k) }}'> {{ v }} </a></dd>
+                    {% endfor %}
+                {% else %}
+                    <dd>No Documentation</dd>
+                {% endif %}
+            </div>
+        </fieldset>
+    </div>
 {% endblock %}

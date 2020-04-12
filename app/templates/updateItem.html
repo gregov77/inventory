@@ -15,7 +15,7 @@
     <dt>Documentation</dt>
     {% if itemDoc %}
         {% for doc_id, doc_name in itemDoc.items() %}
-        <dd>{{ doc_name }}<a href='{{ url_for("delete_document", itemId=itemId, docId=doc_id) }}'>x</a></dd>
+            {{ doc_name }} &nbsp; <a href='{{ url_for("delete_document", itemId=itemId, docId=doc_id) }}' class='btn btn-sm btn-outline-danger'>x</a>
         {% endfor %}
     {% else %}
         <dd>No documentation</dd>

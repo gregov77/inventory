@@ -1,12 +1,18 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>{{ title }}</h1>
-    <form method='POST'>
-        {{ form.searchType(id='types') }} <br>
-        {{ form.searchSubtype(id='subtypes') }} <br>
-        {{ form.submit }}
-    </form>
+    <div class="content-section">
+        <form method='POST'>
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Add new item</legend>
+                {{ form.searchType(id='types', class="form-control") }} <br>
+                {{ form.searchSubtype(id='subtypes', class="form-control") }}
+            </fieldset>
+            <div class="form-group">    
+                {{ form.submit(class="btn btn-outline-info") }}
+            </div>
+        </form>
+    </div>
 
 
     <script>

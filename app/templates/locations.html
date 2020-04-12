@@ -1,18 +1,62 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>{{ title }}</h1>
-<div>
-    <form action="" method="POST">
-        {{ form.hidden_tag() }}
-        <h2>Rooms</h2>
-        <p>{{form.room}} {{ form.addRoom }}</p> 
-        <br>
-        <h2>Storage</h2>
-        <p>{{ form.roomList.label }} {{ form.roomList }} {{ form.viewStorage }} {{ form.delete_room }}</p>
-        <p>{{ form.storage.label}} {{form.storage}} {{ form.addStorage }}</p>
-        <p>{{ form.storageList.label }} {{ form.storageList }} {{ form.delete_storage }}</p> 
-    </form>
+    <div class="content-section">
+        <form action="" method="POST">
+            {{ form.hidden_tag() }}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Locations</legend>
+            <h6>Add Room</h6>
+            <div class="form-group row">
+                <div class='col-lg-6'>
+                    {{ form.room(class="form-control") }}
+                </div>
+                <div class="col-lg-6">
+                    {{ form.addRoom(class="btn btn-outline-info") }}
+                </div>
+            </div>
+            <br>
+            <h6>Manage storage</h6>
+            <div class="form-group row">
+                <div class='col-lg-2'>
+                    {{ form.roomList.label(class="form-control-label") }}
+                </div>
+                <div class="col-lg-4">
+                    {{ form.roomList(class="form-control") }}
+                </div>
+                <div class="col-lg-4">
+                    {{ form.viewStorage(class="btn btn-outline-info") }}
+                </div>
+                <div class="col-lg-2">
+                    {{ form.delete_room(class="btn btn-outline-danger") }}
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class='col-lg-2'>
+                    {{ form.storage.label(class="form-control-label") }}
+                </div>
+                <div class="col-lg-4">
+                    {{ form.storage(class="form-control") }}
+                </div>
+                <div class="col-lg-4">
+                    {{ form.addStorage(class="btn btn-outline-info") }}
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class='col-lg-2'>
+                    {{ form.storageList.label(class="form-control-label") }}
+                </div>
+                <div class="col-lg-4">
+                    {{ form.storageList(class="form-control") }}
+                </div>
+                <div class="col-lg-4">
+                    {{ form.delete_storage(class="btn btn-outline-danger") }}
+                </div>
+            </div>
+            </fieldset> 
+        </form>
 </div>
 
 {% endblock %}

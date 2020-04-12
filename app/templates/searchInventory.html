@@ -1,15 +1,44 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Search item</h1>
-    <form method='POST'>
-        {{ form.searchType(id='types') }}
-        {{ form.searchSubtype(id='subtypes') }} <br>
-        {{ form.searchField1(class='search') }} {{ form.searchValue1 }}<br>
-        {{ form.searchField2(class='search') }} {{ form.searchValue2 }}<br>
-        {{ form.searchField3(class='search') }} {{ form.searchValue3 }}<br>
-        {{ form.submit }}
-    </form>
+    <div class="content-section">
+        <form method='POST'>
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Search inventory</legend>
+                {{ form.searchType(id='types', class="form-control") }} <br>
+                {{ form.searchSubtype(id='subtypes', class="form-control") }} <br>
+                
+                <div><h6>Search criteria</h6></div>
+                <div class="form-group row">
+                    <div class='col-lg-4'>
+                        {{ form.searchField1(class="search form-control") }}
+                    </div>
+                    <div class="col-lg-8">
+                        {{ form.searchValue1(class="form-control") }}
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class='col-lg-4'>
+                        {{ form.searchField2(class='search form-control') }}
+                    </div>
+                    <div class="col-lg-8">
+                        {{ form.searchValue2(class="form-control") }}
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class='col-lg-4'>
+                        {{ form.searchField3(class='search form-control') }}
+                    </div>
+                    <div class="col-lg-8">
+                        {{ form.searchValue3(class="form-control") }}
+                    </div>
+                </div>
+            </fieldset>
+            <div class="form-group">
+                {{ form.submit(class="btn btn-outline-info") }}
+            </div>
+        </form>
+    </div>
 
 
 

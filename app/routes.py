@@ -1,6 +1,6 @@
 from flask import render_template, flash, redirect, url_for, request, send_file
 from flask import current_app, jsonify
-from app import mongo
+from app import mongo, bcrypt
 import gridfs
 from .forms import (LoginForm, NewTypeForm, SearchedItemForm, SearchedItemListForm, StoreForm,
     SearchInventoryForm, NewSubTypeForm, MirrorForm, LocationsForm, formDict)
@@ -22,31 +22,32 @@ def index():
     form = LoginForm()
     if form.validate_on_submit():
         user_db = mongo.db.user.find_one({'username':form.username.data})
-        #if user and bcrypt.check_password_hash(user.password, form.password.data):
-        if user_db and user_db['password']==form.password.data:
+        if user_db and bcrypt.check_password_hash(user_db['password'], form.password.data):
+            # if user_db and user_db['password']==form.password.data:
             user = User(id=user_db['_id'], username=user_db['username'], password=user_db['password'])
             login_user(user)
             next_page = request.args.get('next')
             flash('Login successful', 'success')
 
-            return redirect(next_page) if next_page else redirect(url_for('index'))
+            return redirect(next_page) if next_page else redirect(url_for('main'))
         else:
             flash('Login Unsuccessful. Please check username and password', 'danger')
 
-    return render_template('login.html', form=form, title='Login')
+    return render_template('login.html', form=form)
+
+
+@current_app.route('/main')
+@login_required
+def main():
+    return render_template('main.html')
 
 
 @current_app.route("/logout")
 def logout():
     logout_user()
-    flash('Logout successful', 'success')
+    flash('You are logged out', 'info')
     return redirect(url_for('index'))
 
-
-@current_app.route('/main', methods = ['GET', 'POST'])
-@login_required
-def main():
-    return render_template('base.html')
 
 @current_app.route('/item/new', methods = ['GET', 'POST'])
 @login_required
@@ -58,7 +59,7 @@ def newItem():
         subgroup = form.searchSubtype.data.upper()
         return redirect(url_for('newItemEntry', group=group, subgroup=subgroup))
     
-    return render_template('newItem.html', title='Add item', form=form, choices=choices)
+    return render_template('newItem.html', form=form, choices=choices)
 
 
 @current_app.route('/item/new/<group>/<subgroup>', methods = ['GET', 'POST'])
@@ -84,7 +85,7 @@ def newItemEntry(group, subgroup):
         
             return redirect(url_for('viewItem', itemId=newProduct['_id']))
 
-    return render_template('newItemEntry.html', title='Add item', group=group, subgroup=subgroup, form=form)    
+    return render_template('newItemEntry.html', group=group, subgroup=subgroup, form=form, html_form=f'forms/{subgroup}.html')    
 
 
 @current_app.route('/item/update/<itemId>', methods= ['GET', 'POST'])
@@ -256,7 +257,7 @@ def locations():
             roomDefault = newRoom
             flash(f'Room {newRoom} added.')
         else:
-            flash('Provide a proper room name as string.')
+            flash('Provide a proper room name as string.', 'danger')
 
         return redirect(url_for('locations', roomDefault=roomDefault))
     
@@ -264,9 +265,9 @@ def locations():
         if form.storage.data !='':
             print(form.roomList.data, form.storage.data)
             newStorage = save_storage(form.roomList.data, form.storage.data)
-            flash(f'storage {newStorage} added in room {form.roomList.data}.')
+            flash(f'storage {newStorage} added in room {form.roomList.data}.', 'info')
         else:
-            flash('Provide a proper storage name as string.')
+            flash('Provide a proper storage name as string.', 'danger')
         
         return redirect(url_for('locations', roomDefault=form.roomList.data))
 
@@ -275,13 +276,13 @@ def locations():
 
     if form.validate_on_submit() and form.delete_room.data:
         delete_room(form.roomList.data)
-        flash(f'Room {form.roomList.data} has been deleted')
+        flash(f'Room {form.roomList.data} has been deleted.', 'info')
         
         return redirect(url_for('locations'))
 
     if form.validate_on_submit() and form.delete_storage.data:
         delete_storage(form.roomList.data, form.storageList.data)
-    
+        flash(f'Storage {form.storageList.data} has been deleted.', 'info')
         return redirect(url_for('locations', roomDefault=form.roomList.data))
     
     return render_template('locations.html', title='Locations', form=form)
