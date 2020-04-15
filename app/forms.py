@@ -34,31 +34,6 @@ class NewSubTypeForm(FlaskForm):
     submit = SubmitField('Submit')
 
 
-class ProductForm(FlaskForm):
-    '''
-        Parent form for all products.
-    '''
-     
-    manufacturer = StringField('Manufacturer', validators=[DataRequired()])
-    part_number = StringField('Part number', validators=[DataRequired()])
-    price = FloatField('Price')
-    currency = RadioField('Currency', choices=[('GBP','£'), ('EUR','€'), ('USD','$')], default='GBP')
-    dimension_unit = RadioField('Dimension unit', choices=[('mm','mm'), ('in','in')], default='mm')
-    description = TextAreaField('Description', validators=[DataRequired()])
-    documentation = MultipleFileField('Documentation files')
-    submit = SubmitField('Submit')
-
-
-class MirrorForm(ProductForm):
-    '''
-        Parent form for all products.
-    '''
-     
-    diameter = FloatField('Diameter', validators=[DataRequired()])
-    coating = SelectField('Coating', choices=coating_choices, validators=[DataRequired()])
-    focal_length = FloatField('Focal length')
-    
-
 class SearchInventoryForm(FlaskForm):
     '''
         Class defining the search form for the searchItem page.
@@ -127,8 +102,44 @@ class StoreForm(FlaskForm):
     quantity = IntegerField('Quantity')
     submit = SubmitField('Submit')
 
+#================#
+# All item forms #
+#================#
 
-formDict = {'MIRRORS':MirrorForm}
+class ProductForm(FlaskForm):
+    '''
+        Parent form for all products.
+    '''
+     
+    manufacturer = StringField('Manufacturer', validators=[DataRequired()])
+    part_number = StringField('Part number', validators=[DataRequired()])
+    price = FloatField('Price')
+    currency = RadioField('Currency', choices=[('GBP','£'), ('EUR','€'), ('USD','$')], default='GBP')
+    dimension_unit = RadioField('Dimension unit', choices=[('mm','mm'), ('in','in')], default='mm')
+    description = TextAreaField('Description', validators=[DataRequired()])
+    documentation = MultipleFileField('Documentation files')
+    submit = SubmitField('Submit')
 
 
+class MirrorForm(ProductForm):
+    '''
+        Mirror form.
+    '''
+     
+    diameter = FloatField('Diameter', validators=[DataRequired()])
+    coating = SelectField('Coating', choices=coating_choices, validators=[DataRequired()])
+    focal_length = FloatField('Focal length')
 
+
+class WindowForm(ProductForm):
+    '''
+        Window form.
+    '''
+     
+    diameter = FloatField('Diameter', validators=[DataRequired()])
+    thickness = FloatField('Thickness', validators=[DataRequired()])
+    coating = SelectField('Coating', choices=coating_choices, validators=[DataRequired()])
+
+
+formDict = {'MIRRORS':MirrorForm,
+            'WINDOWS':WindowForm}

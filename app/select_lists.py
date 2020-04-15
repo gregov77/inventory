@@ -10,17 +10,21 @@ coating_choices = [
     ('uncoated', 'Uncoated')
 ]
 
+# Pre-defined items organised by group of elements
+# TODO :
+# 'Optics':['Beamsplitters', 'Diffusers', 'Filters',
+#              'Gratings', 'Lenses', 'Mirrors', 'Objective lenses',
+#              'Polarizers', 'Prisms', 'Reticles', 'Windows'
+#             ]
 choices = {
     'choose a type':'choose a subtype',
-    'Optics':['Beamsplitters', 'Diffusers', 'Filters',
-              'Gratings', 'Lenses', 'Mirrors', 'Objective lenses',
-              'Polarizers', 'Prisms', 'Reticles', 'Windows'
-             ]           
+    'Optics':['Mirrors', 'Windows']           
         }
 
 get_search_fields = {
     'base': {'manufacturer':'Manufacturer', 'part_number':'Part number', 'description':'Description'},
-    'mirrors' : {'diameter':'Diameter', 'coating':'Coating', 'curvature':'Curvature'}
+    'mirrors' : {'diameter':'Diameter', 'coating':'Coating', 'curvature':'Curvature'},
+    'windows' : {'diameter':'Diameter', 'thickness':'Thickness', 'coating':'Coating'}
 }
 
 non_str_fields = {

@@ -1,27 +1,94 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>{{ title }}</h1>
-<form action="" method="post" enctype="multipart/form-data">
-<div>
-    {{ form.hidden_tag() }}
-    {% for field in form %}
-        {% if field.name!='submit' and field.name!='csrf_token' %}
-            <dt>{{ field.label }}</dt> <dd>{{ field }}</dd>
-        {% endif %}
-    {% endfor %}
-</div>
-<div>
-    <dt>Documentation</dt>
-    {% if itemDoc %}
-        {% for doc_id, doc_name in itemDoc.items() %}
-            {{ doc_name }} &nbsp; <a href='{{ url_for("delete_document", itemId=itemId, docId=doc_id) }}' class='btn btn-sm btn-outline-danger'>x</a>
-        {% endfor %}
-    {% else %}
-        <dd>No documentation</dd>
-    {% endif %}
-</div>
-{{ form.submit }}
-</form>    
+<div class="content-section">
+
+    <form action="" method="post" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+        <fieldset class="form-group"></fieldset>
+            <legend class="border-bottom mb-4">{{ title }}</legend>
+            <div class="form-group row">
+                <div class='col-lg-2'>
+                    {{ form.manufacturer.label(class="form-control-label") }}
+                </div>
+                <div class="col-lg-10">
+                    {{ form.manufacturer(class="form-control") }}
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class='col-lg-2'>
+                    {{ form.part_number.label(class="form-control-label") }}
+                </div>
+                <div class="col-lg-10">
+                    {{ form.part_number(class="form-control") }}
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class='col-lg-2'>
+                    {{ form.price.label(class="form-control-label") }}
+                </div>
+                <div class="col-lg-5">
+                    {{ form.price(class="form-control") }}
+                </div>
+                <div class="col-lg-5">
+                    <div class="form-check form-check-inline">
+                        {% for subfield in form.currency %}
+                            {{ subfield(class="form-check-input") }} {{ subfield.label(class="form-check-label") }}
+                            &nbsp;
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-lg-2">
+                    {{ form.description.label(class="form-control-label") }}
+                </div>
+                <div class="col-lg-10">
+                    {{ form.description(class="form-control") }}
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class='col-lg-2'>
+                    {{ form.documentation.label(class="form-control-label") }}
+                </div>
+                <div class="col-lg-10">
+                    {{ form.documentation(class="form-control-file") }}
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class='col-lg-3'>
+                    {{ form.dimension_unit.label(class="form-control-label") }}
+                </div>
+                <div class="col-lg-5">
+                    <div class="form-check form-check-inline">
+                        {% for subfield in form.dimension_unit %}
+                            {{ subfield(class="form-check-input") }} {{ subfield.label(class="form-check-label") }}
+                            &nbsp;
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <!-- include specific item file                  -->
+            {% include html_form %}
+            <!--  -->
+            <div class='form-group row'>
+                <div class='col-lg-12'><b>Documentation</b></div>
+                {% if itemDoc %}
+                    {% for doc_id, doc_name in itemDoc.items() %}
+                    <div class='col-lg-12'>
+                        {{ doc_name }} &nbsp; <a href='{{ url_for("delete_document", itemId=itemId, docId=doc_id) }}' class='btn btn-sm btn-outline-danger'>x</a>
+                    </div>
+                        {% endfor %}
+                {% else %}
+                    <div class='col-lg-12'>No documentation</div>
+                {% endif %}
+            </div>
+        </fieldset>
+        <div class="form-group">    
+            {{ form.submit(class="btn btn-outline-info") }}
+        </div>
+    </form>
+</div> 
 
 {% endblock %}
+

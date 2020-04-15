@@ -1,15 +1,41 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>{{ title }}</h1>
-<p>Item code: <b>{{ itemId }}</b></p>
-<div>
+<div class="content-section">
     <form action="" method="POST">
-        <p>{{ form.roomSelect.label }} {{ form.roomSelect }} {{ form.roomSubmit }}</p>
-        <p>{{ form.storageSelect.label }} {{ form.storageSelect }}</p>
-        <p>{{ form.quantity.label }} {{ form.quantity }}</p>
-        <p>{{ form.submit }}</p>
-        
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">Store {{ itemId }}</legend>
+            <div class="form-group row">
+                <div class='col-lg-2'>
+                    {{ form.roomSelect.label(class="form-control-label") }}
+                </div>    
+                <div class='col-lg-3'>    
+                    {{ form.roomSelect(class='form-control') }}
+                </div>
+                <div class='col-lg-3'>     
+                    {{ form.roomSubmit(class='btn btn-outline-info') }}
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class='col-lg-2'>
+                    {{ form.storageSelect.label(class='form-control-label') }}
+                </div>
+                <div class='col-lg-3'>
+                    {{ form.storageSelect(class='form-control') }}
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class='col-lg-2'>
+                    {{ form.quantity.label(class='form-control-label') }}
+                </div>
+                <div class='col-lg-3'>
+                    {{ form.quantity(class='form-control') }}
+                </div>
+            </div>     
+        </fieldset>
+        <div class="form-group">    
+            {{ form.submit(class="btn btn-outline-info") }}
+        </div>
     </form>
 </div>
 {% endblock %}

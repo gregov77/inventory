@@ -81,7 +81,7 @@ def newItemEntry(group, subgroup):
                     newProduct['documentation'][str(uid)]=doc.filename
 
             mongo.db.products.insert_one(newProduct)
-            flash(f'Item added: {newProduct["_id"]}')
+            flash(f'Item added: {newProduct["_id"]}', 'success')
         
             return redirect(url_for('viewItem', itemId=newProduct['_id']))
 
@@ -115,7 +115,7 @@ def updateItem(itemId):
         return redirect(url_for('viewItem', itemId=itemId))
 
     return render_template('updateItem.html', title=f'Update {itemId}',
-                           form=form, itemId=itemId, itemDoc=itemDoc)
+                           form=form, itemId=itemId, itemDoc=itemDoc, html_form=f'forms/{item["type"]}.html')
 
 
 @current_app.route('/item/delete/<itemId>', methods= ['GET', 'POST'])
@@ -168,13 +168,13 @@ def inventory(query):
                 local_query = { '_id': litem['_id'] }
                 if quantity == 0:
                     mongo.db.instock.delete_one(local_query)
-                    flash(f'Item removed: {litem["_id"]} {fitem.id_.data}.')
+                    flash(f'Item removed.', 'info')
                 if litem['quantity']  != quantity:
                     newvalues = { '$set': { 'quantity': quantity } }
                     mongo.db.instock.update_one(local_query, newvalues)
-                    flash(f'Item changed: {litem["_id"]} {quantity}.')
+                    flash(f'Item quantity changed.', 'success')
             else:
-                flash(f'Quantity for item {litem["_id"]} should be an integer.')
+                flash(f'Quantity should be an integer.', 'danger')
         
         return redirect(url_for('inventory', query=query))
     
@@ -204,9 +204,16 @@ def storeItem(itemId):
                            quantity=int(form.quantity.data), 
                            room=form.roomSelect.data,
                            storage=form.storageSelect.data)
-        mongo.db.instock.insert_one(vars(newStock))
-        flash(f'{newStock.quantity} {newStock.code} stocked in {newStock.room}, {newStock.storage}')
-        
+        query = {'$and':[{'code':newStock.code},
+                         {'room':newStock.room},
+                         {'storage':newStock.storage}]}
+
+        oldStock = mongo.db.instock.find_one_and_update(query,
+                                               {'$inc': {'quantity': newStock.quantity},
+                                                '$set': {'stocked_date':newStock.stocked_date}})
+        if oldStock == None:
+            mongo.db.instock.insert_one(vars(newStock))
+        flash(f'{newStock.quantity} {newStock.code} stocked in {newStock.room}, {newStock.storage}', 'info')
 
     return render_template('storeItem.html', title='Store item', form=form, itemId=itemId)
 
