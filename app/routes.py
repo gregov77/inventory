@@ -21,9 +21,10 @@ fs = gridfs.GridFS(mongo.db)
 def index():
     form = LoginForm()
     if form.validate_on_submit():
-        user_db = mongo.db.user.find_one({'username':form.username.data})
-        if user_db and bcrypt.check_password_hash(user_db['password'], form.password.data):
-            # if user_db and user_db['password']==form.password.data:
+        username = request.form['username']
+        password = request.form['password']
+        user_db = mongo.db.user.find_one({'username':username})
+        if user_db and bcrypt.check_password_hash(user_db['password'], password):
             user = User(id=user_db['_id'], username=user_db['username'], password=user_db['password'])
             login_user(user)
             next_page = request.args.get('next')
@@ -245,7 +246,7 @@ def delete_document(itemId, docId):
     return redirect(url_for('updateItem', itemId=itemId))
  
 
-@current_app.route('/locations/', methods=['GET', 'POST'])
+@current_app.route('/locations', methods=['GET', 'POST'])
 @login_required
 def locations():
     try:

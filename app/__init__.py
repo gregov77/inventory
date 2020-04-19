@@ -15,6 +15,7 @@ def create_app():
     app.config['SECRET_KEY'] = 'you-will-never-guess'
     app.config["MONGO_URI"] = 'mongodb://localhost:27017/test'
     app.config["TMP"] = '/home/gregory/temp/'
+    app.config['TESTING'] = True
 
     # Initialise plugins
     mongo.init_app(app)
