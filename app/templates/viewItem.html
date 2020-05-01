@@ -5,10 +5,10 @@
         <fieldset class="form-group">
             <legend class="border-bottom mb-4">{{ title }}</legend>
             <div>
-                <a href='{{ url_for("updateItem", itemId=id) }}' class='btn btn-outline-info'>Edit</a>  
-                <a href='{{ url_for("storeItem", itemId=id) }}' class='btn btn-outline-info'>Store</a>  
-                <a href='{{ url_for("inventory", query={"_id":id}) }}' class='btn btn-outline-info'>Check stock</a>
-                <a href='{{ url_for("deleteItem", itemId=id) }}' class='btn btn-outline-danger'>Delete item</a>
+                <a href='{{ url_for("item.updateItem", itemId=id) }}' class='btn btn-outline-info'>Edit</a>  
+                <a href='{{ url_for("item.storeItem", itemId=id) }}' class='btn btn-outline-info'>Store</a>  
+                <a href='{{ url_for("invtory.inventory", query={"_id":id}) }}' class='btn btn-outline-info'>Check stock</a>
+                <a href='{{ url_for("item.deleteItem", itemId=id) }}' class='btn btn-outline-danger'>Delete item</a>
             </div>
             <br>
             <div>
@@ -29,7 +29,7 @@
                 <dt>Documentation</dt>
                 {% if 'documentation' in product %}
                     {% for k, v in product['documentation'].items() %}
-                    <dd><a href='{{ url_for("get_upload", id=k) }}'> {{ v }} </a></dd>
+                    <dd><a href='{{ url_for("utils.get_upload", id=k) }}'> {{ v }} </a></dd>
                     {% endfor %}
                 {% else %}
                     <dd>No Documentation</dd>

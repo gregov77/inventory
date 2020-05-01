@@ -77,8 +77,10 @@ def test_access_authorised(client):
         WHEN the user is logged in
         THEN check the response is authorised (200)
     """
-    client.post('/', data=dict(username='username', password='password'),
+    response = client.post('/', data=dict(username='username', password='password'),
                 follow_redirects=True)
+    
+    assert b'Log In' in response.data
 
     response = client.get('/main')
     assert response.status_code == 200

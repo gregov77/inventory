@@ -93,7 +93,10 @@ def update_productDict(productId, dataDict):
     product = mongo.db.products.find_one({'_id':productId})
     for k, v in dataDict.items():
         if k not in formFieldOnly:
-            if product[k] != v: productDict[k] = v
+            if product.get(k) is None and v!='':
+                productDict[k] = v 
+            elif product.get(k) is not None and product[k] != v: 
+                productDict[k] = v
 
     print(productDict)
     return productDict

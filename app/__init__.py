@@ -22,7 +22,13 @@ def create_app():
     login_manager.init_app(app)
     bcrypt.init_app(app)
 
-    with app.app_context():
-        from app import routes
-
-        return app
+    from app.users.routes import users
+    from app.item.routes import item
+    from app.invtory.routes import invtory
+    from app.utils.routes import utils
+    app.register_blueprint(users)
+    app.register_blueprint(item)
+    app.register_blueprint(invtory)
+    app.register_blueprint(utils)
+    
+    return app

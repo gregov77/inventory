@@ -26,13 +26,13 @@
                     <div class="collapse navbar-collapse" id="navbarToggle">
                         <img src="/static/scapalog.png" alt="SCAPA logo" height="50">
                         <div class="navbar-nav mr-auto">
-                            <a class="nav-item nav-link" href='{{ url_for("main") }}'>Home</a>  
-                            <a class="nav-item nav-link" href='{{ url_for("newItem") }}'>New item</a>  
-                            <a class="nav-item nav-link" href='{{ url_for("searchInventory") }}'>Search inventory</a> 
-                            <a class="nav-item nav-link" href='{{ url_for("locations") }}'>Locations</a> 
+                            <a class="nav-item nav-link" href='{{ url_for("invtory.main") }}'>Home</a>  
+                            <a class="nav-item nav-link" href='{{ url_for("item.newItem") }}'>New item</a>  
+                            <a class="nav-item nav-link" href='{{ url_for("invtory.searchInventory") }}'>Search inventory</a> 
+                            <a class="nav-item nav-link" href='{{ url_for("invtory.locations") }}'>Locations</a> 
                         </div>
                         <div class="navbar-nav"> 
-                            <a class="nav-item nav-link" href='{{ url_for("logout") }}'>Logout</a>
+                            <a class="nav-item nav-link" href='{{ url_for("users.logout") }}'>Logout</a>
                         </div>
                     </div>
                 </div>

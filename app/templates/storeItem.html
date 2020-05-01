@@ -4,7 +4,7 @@
 <div class="content-section">
     <form action="" method="POST">
         <fieldset class="form-group">
-            <legend class="border-bottom mb-4">Store {{ itemId }}</legend>
+            <legend class="border-bottom mb-4">Store <a href='{{ url_for("item.viewItem", itemId=itemId) }}'>{{ itemId }}</a></legend>
             <div class="form-group row">
                 <div class='col-lg-2'>
                     {{ form.roomSelect.label(class="form-control-label") }}
