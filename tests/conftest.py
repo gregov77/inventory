@@ -45,10 +45,12 @@ def client():
     mongo.db.user.insert_one(vars(user))
 
     # Establish an application context before running the tests.
-    ctx = app.app_context()
-    ctx.push()
+    # ctx = app.app_context()
+    # ctx.push()
  
-    yield testing_client  # this is where the testing happens!
+    # yield testing_client  # this is where the testing happens!
+    with app.test_client() as client:
+        yield client
     
     mongo.db.user.delete_one({'username':'username'})
-    ctx.pop()
+    # ctx.pop()
