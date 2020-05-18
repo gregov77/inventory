@@ -5,16 +5,12 @@ from app import create_app, mongo, bcrypt
 import gridfs
 from app.models import InStock, User
 from app.func_helpers import get_productDict
+from app.config import Config_test
 from bson import ObjectId
 
-
-@pytest.fixture(scope='module')
-def client():
-    app = create_app()
- 
-    # Flask provides a way to test your application by exposing the Werkzeug test Client
-    # and handling the context locals for you.
-    testing_client = app.test_client()
+@pytest.fixture
+def app():
+    app = create_app(Config_test)
     fs=gridfs.GridFS(mongo.db)
 
     #create the database and load test data
@@ -38,19 +34,37 @@ def client():
         mongo.db.products.insert_one(product)
         mongo.db.instock.insert_one(vars(stock))
     
-    # Create test user
-    username = 'username'
-    password = 'password'
-    user = User(username=username, password=bcrypt.generate_password_hash(password))
-    mongo.db.user.insert_one(vars(user))
+        # Create test user
+        username = 'username'
+        password = 'password'
+        user = User(username=username, password=bcrypt.generate_password_hash(password))
+        mongo.db.user.insert_one(vars(user))
 
-    # Establish an application context before running the tests.
-    # ctx = app.app_context()
-    # ctx.push()
- 
-    # yield testing_client  # this is where the testing happens!
-    with app.test_client() as client:
-        yield client
+    yield app    
     
     mongo.db.user.delete_one({'username':'username'})
-    # ctx.pop()
+    
+
+@pytest.fixture
+def client(app):
+    return app.test_client()
+
+
+class AuthActions():
+    def __init__(self, client):
+        self._client = client
+
+    def login(self, username='username', password='password'):
+        return self._client.post(
+            '/',
+            data={'username': username, 'password': password},
+            follow_redirects=True
+        )
+
+    def logout(self):
+        return self._client.get('/logout', follow_redirects=True)
+
+
+@pytest.fixture
+def auth(client):
+    return AuthActions(client)

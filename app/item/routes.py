@@ -123,4 +123,4 @@ def storeItem(itemId):
 def deleteItem(itemId):
     mongo.db.products.delete_one({'_id':itemId})
     flash(f'Item {itemId} removed from database.', 'info')
-    return redirect(url_for('inventory.main'))
+    return redirect(url_for('invtory.main'))

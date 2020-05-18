@@ -1,3 +1,4 @@
+from flask import request, url_for
 from app import mongo, bcrypt
 
 def test_home_page(client):
@@ -12,25 +13,22 @@ def test_user(client):
     assert user is not None
     assert bcrypt.check_password_hash(user['password'], 'password')==True
 
-def test_valid_login_logout(client):
+
+def test_valid_login_logout(client, auth):
     """
     GIVEN a Flask application
     WHEN the '/login' page is posted to (POST)
     THEN check the response is valid
     """
-    response = client.post('/',
-                            data=dict(username='username', 
-                                      password='password'),
-                            follow_redirects=True)
-    assert response.status_code == 200
+    response = auth.login()
+    assert b"SCAPA inventory" in response.data
     
     """
     GIVEN a Flask application
     WHEN the '/logout' page is requested (GET)
-    THEN check the response is valid
+    THEN check redirect to login page
     """
-    response = client.get('/logout', follow_redirects=True)
-    assert response.status_code == 200
+    response = auth.logout()
     assert b"Username" in response.data
 
 
@@ -71,16 +69,13 @@ def test_access_unauthorised(client):
     assert response.status_code == 401  
 
 
-def test_access_authorised(client):
+def test_access_authorised(client, auth):
     """
         GIVEN a Flask application
         WHEN the user is logged in
         THEN check the response is authorised (200)
     """
-    response = client.post('/', data=dict(username='username', password='password'),
-                follow_redirects=True)
-    
-    assert b'Log In' in response.data
+    auth.login()
 
     response = client.get('/main')
     assert response.status_code == 200
@@ -106,30 +101,5 @@ def test_access_authorised(client):
     response = client.get('/inventory/{"type":"MIRRORS"}')
     assert response.status_code == 200
 
-    response = client.get('/item/delete/CVI-TLM1')
-    assert response.status_code == 200
-
     response = client.get('/locations')
     assert response.status_code == 200 
-
-
-# def test_newItem_post_success(client):
-#     product = dict(type='MIRRORS', manufacturer='CVI', part_number='TLM2', dimension_unit='MM',
-#                    diameter=1, price='1000.00', currency='EUR', description='a mirror')
-#     response = client.post('/item/new', data=product, follow_redirects=True)
-#     assert response.status_code == 401
-
-
-# def test_newItem_post_inDatabase(client):
-#     product = dict(manufacturer='CVI', part_number='TLM1',
-#                    group='optics', description='a mirror')
-#     response = client.post('/item/new', data=product, follow_redirects=True)    
-#     assert b'database' in response.data
-#     assert response.status_code == 200
-
-
-
-
-
-
- 

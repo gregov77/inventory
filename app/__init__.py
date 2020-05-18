@@ -2,20 +2,17 @@ from flask import Flask
 from flask_pymongo import PyMongo
 from flask_login import LoginManager
 from flask_bcrypt import Bcrypt
+from app.config import Config
 
 
 mongo = PyMongo()
 login_manager = LoginManager()
 bcrypt = Bcrypt()
 
-def create_app():
+def create_app(config_class=Config):
     ''' Initialise the core application.'''
     app = Flask(__name__, instance_relative_config=True)
-    
-    app.config['SECRET_KEY'] = 'you-will-never-guess'
-    app.config["MONGO_URI"] = 'mongodb://localhost:27017/test'
-    app.config["TMP"] = '/home/gregory/temp/'
-    app.config['TESTING'] = True
+    app.config.from_object(config_class)
 
     # Initialise plugins
     mongo.init_app(app)

