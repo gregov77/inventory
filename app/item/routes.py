@@ -37,11 +37,12 @@ def newItemEntry(group, subgroup):
             flash('Item already in the database.', 'info')
         else:
             docs = request.files.getlist(form.documentation.name)
-            if docs[0].filename!='':
-                newProduct['documentation'] = dict()
-                for doc in docs:
-                    uid = fs.put(doc, filename=doc.filename)
-                    newProduct['documentation'][str(uid)]=doc.filename
+            if docs:
+                if docs[0].filename!='':
+                    newProduct['documentation'] = dict()
+                    for doc in docs:
+                        uid = fs.put(doc, filename=doc.filename)
+                        newProduct['documentation'][str(uid)]=doc.filename
 
             mongo.db.products.insert_one(newProduct)
             flash(f'Item added: {newProduct["_id"]}', 'success')

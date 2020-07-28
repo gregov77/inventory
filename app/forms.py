@@ -115,7 +115,7 @@ class ProductForm(FlaskForm):
     part_number = StringField('Part number', validators=[DataRequired()])
     price = FloatField('Price')
     currency = RadioField('Currency', choices=[('GBP','£'), ('EUR','€'), ('USD','$')], default='GBP')
-    dimension_unit = RadioField('Dimension unit', choices=[('mm','mm'), ('in','in')], default='mm')
+    dimension_unit = RadioField('Dimension unit', choices=[('MM','mm'), ('IN','in')], default='MM')
     description = TextAreaField('Description', validators=[DataRequired()])
     documentation = MultipleFileField('Documentation files')
     submit = SubmitField('Submit')

@@ -12,8 +12,8 @@ users = Blueprint('users', __name__)
 def index():
     form = LoginForm()
     if form.validate_on_submit():
-        username = request.form['username']
-        password = request.form['password']
+        username = form.username.data
+        password = form.password.data
         with open('login.log', 'w') as f:
             f.write(f'{username} {password}')
         user_db = mongo.db.user.find_one({'username':username})

@@ -47,7 +47,7 @@
 <span id="scapalog-main"></span><h1>ScapaLog main<a class="headerlink" href="#module-app" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="app.create_app">
-<code class="sig-prename descclassname">app.</code><code class="sig-name descname">create_app</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.create_app" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">app.</code><code class="sig-name descname">create_app</code><span class="sig-paren">(</span><em class="sig-param">config_class=&lt;class 'app.config.Config'&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#app.create_app" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialise the core application.</p>
 </dd></dl>
 
@@ -68,7 +68,7 @@
 <dl class="class">
 <dt id="app.forms.MirrorForm">
 <em class="property">class </em><code class="sig-prename descclassname">app.forms.</code><code class="sig-name descname">MirrorForm</code><span class="sig-paren">(</span><em class="sig-param">formdata=&lt;object object&gt;</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#app.forms.MirrorForm" title="Permalink to this definition">¶</a></dt>
-<dd><p>Parent form for all products.</p>
+<dd><p>Mirror form.</p>
 </dd></dl>
 
 <dl class="class">
@@ -100,7 +100,8 @@ the newItem page.</p>
 <dl class="class">
 <dt id="app.forms.SearchInventoryForm">
 <em class="property">class </em><code class="sig-prename descclassname">app.forms.</code><code class="sig-name descname">SearchInventoryForm</code><span class="sig-paren">(</span><em class="sig-param">formdata=&lt;object object&gt;</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#app.forms.SearchInventoryForm" title="Permalink to this definition">¶</a></dt>
-<dd><p>Class defining the search form for the searchItem page.</p>
+<dd><p>Class defining the search form for the searchItem page.
+Class also used for the newItem page.</p>
 </dd></dl>
 
 <dl class="class">
@@ -128,6 +129,12 @@ items.</p>
 <dt id="app.forms.StoreForm">
 <em class="property">class </em><code class="sig-prename descclassname">app.forms.</code><code class="sig-name descname">StoreForm</code><span class="sig-paren">(</span><em class="sig-param">formdata=&lt;object object&gt;</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#app.forms.StoreForm" title="Permalink to this definition">¶</a></dt>
 <dd><p>form to add item to inventory</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="app.forms.WindowForm">
+<em class="property">class </em><code class="sig-prename descclassname">app.forms.</code><code class="sig-name descname">WindowForm</code><span class="sig-paren">(</span><em class="sig-param">formdata=&lt;object object&gt;</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#app.forms.WindowForm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Window form.</p>
 </dd></dl>
 
 </div>
