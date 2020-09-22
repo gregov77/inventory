@@ -106,40 +106,4 @@ class StoreForm(FlaskForm):
 # All item forms #
 #================#
 
-class ProductForm(FlaskForm):
-    '''
-        Parent form for all products.
-    '''
-     
-    manufacturer = StringField('Manufacturer', validators=[DataRequired()])
-    part_number = StringField('Part number', validators=[DataRequired()])
-    price = FloatField('Price')
-    currency = RadioField('Currency', choices=[('GBP','£'), ('EUR','€'), ('USD','$')], default='GBP')
-    dimension_unit = RadioField('Dimension unit', choices=[('MM','mm'), ('IN','in')], default='MM')
-    description = TextAreaField('Description', validators=[DataRequired()])
-    documentation = MultipleFileField('Documentation files')
-    submit = SubmitField('Submit')
-
-
-class MirrorForm(ProductForm):
-    '''
-        Mirror form.
-    '''
-     
-    diameter = FloatField('Diameter', validators=[DataRequired()])
-    coating = SelectField('Coating', choices=coating_choices, validators=[DataRequired()])
-    focal_length = FloatField('Focal length')
-
-
-class WindowForm(ProductForm):
-    '''
-        Window form.
-    '''
-     
-    diameter = FloatField('Diameter', validators=[DataRequired()])
-    thickness = FloatField('Thickness', validators=[DataRequired()])
-    coating = SelectField('Coating', choices=coating_choices, validators=[DataRequired()])
-
-
-formDict = {'MIRRORS':MirrorForm,
-            'WINDOWS':WindowForm}
+from .itemsforms import *

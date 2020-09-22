@@ -1,7 +1,8 @@
 from flask import render_template, flash, redirect, url_for, request, Blueprint
 from app import mongo
 import gridfs
-from app.forms import StoreForm, SearchInventoryForm, formDict
+from app.forms import StoreForm, SearchInventoryForm
+from app.itemsforms import formDict
 from app.models import InStock
 from app.select_lists import choices
 from app.func_helpers import get_productDict, update_productDict, get_roomList, get_storageList
