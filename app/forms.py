@@ -7,6 +7,9 @@ from .select_lists import type_choices, coating_choices, choices
 
 
 class LoginForm(FlaskForm):
+    '''
+        Form to enter user name and password.
+    '''
     username = StringField('Username', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
     #remember = BooleanField('Remember Me')
