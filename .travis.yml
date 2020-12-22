@@ -5,5 +5,8 @@ dist: linuxmint
 
 language: python
 
+services:
+  - mongodb
+
 script:
   - python -m pytest -v
