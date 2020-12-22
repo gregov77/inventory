@@ -1,0 +1,34 @@
+astroid @ file:///tmp/build/80754af9/astroid_1607714509910/work
+attrs @ file:///tmp/build/80754af9/attrs_1604765588209/work
+bcrypt @ file:///tmp/build/80754af9/bcrypt_1607022650461/work
+certifi==2020.12.5
+cffi @ file:///tmp/build/80754af9/cffi_1606255122322/work
+click==7.1.2
+Flask==1.1.2
+Flask-Bcrypt @ file:///tmp/build/80754af9/flask-bcrypt_1592513356562/work
+Flask-Login==0.5.0
+Flask-PyMongo==2.3.0
+Flask-WTF==0.14.3
+importlib-metadata @ file:///tmp/build/80754af9/importlib-metadata_1602276842396/work
+iniconfig @ file:///tmp/build/80754af9/iniconfig_1602780191262/work
+isort @ file:///tmp/build/80754af9/isort_1602603989581/work
+itsdangerous==1.1.0
+Jinja2==2.11.2
+lazy-object-proxy @ file:///tmp/build/80754af9/lazy-object-proxy_1607707328286/work
+MarkupSafe @ file:///tmp/build/80754af9/markupsafe_1607027305082/work
+mccabe==0.6.1
+more-itertools @ file:///tmp/build/80754af9/more-itertools_1605111547926/work
+packaging @ file:///tmp/build/80754af9/packaging_1607971725249/work
+pluggy==0.12.0
+py @ file:///tmp/build/80754af9/py_1607971587848/work
+pycparser @ file:///tmp/build/80754af9/pycparser_1594388511720/work
+pylint @ file:///tmp/build/80754af9/pylint_1607716683547/work
+pymongo==3.11.2
+pyparsing==2.4.7
+pytest==0.0.0
+six @ file:///tmp/build/80754af9/six_1605205306277/work
+toml @ file:///tmp/build/80754af9/toml_1592853716807/work
+Werkzeug==1.0.1
+wrapt @ file:///tmp/build/80754af9/wrapt_1607712509268/work
+WTForms @ file:///tmp/build/80754af9/wtforms_1597707484216/work
+zipp @ file:///tmp/build/80754af9/zipp_1604001098328/work
