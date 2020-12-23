@@ -3,11 +3,14 @@ from flask_pymongo import PyMongo
 from flask_login import LoginManager
 from flask_bcrypt import Bcrypt
 from app.config import Config
+from os import getcwd
 
 
 mongo = PyMongo()
 login_manager = LoginManager()
 bcrypt = Bcrypt()
+TMP = 'tmp/'
+ROOT = getcwd()+'/'
 
 def create_app(config_class=Config):
     ''' Initialise the core application.'''
