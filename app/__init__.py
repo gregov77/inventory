@@ -9,8 +9,7 @@ from os import getcwd
 mongo = PyMongo()
 login_manager = LoginManager()
 bcrypt = Bcrypt()
-TMP = 'tmp/'
-ROOT = getcwd()+'/'
+TMP = getcwd()+'/tmp/'
 
 def create_app(config_class=Config):
     ''' Initialise the core application.'''
