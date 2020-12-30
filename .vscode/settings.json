@@ -1,5 +1,5 @@
 {
-    "python.pythonPath": "/home/gregory/miniconda3/envs/webdev/bin/python",
+    "python.pythonPath": "/home/gregory/miniconda3/envs/flask/bin/python",
     "python.testing.pytestArgs": [
         "tests"
     ],
