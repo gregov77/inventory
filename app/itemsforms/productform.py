@@ -10,9 +10,10 @@ class ProductForm(FlaskForm):
      
     manufacturer = StringField('Manufacturer', validators=[DataRequired()])
     part_number = StringField('Part number', validators=[DataRequired()])
+    own_reference = StringField('SCAPA reference')
     price = FloatField('Price')
     currency = RadioField('Currency', choices=[('GBP','£'), ('EUR','€'), ('USD','$')], default='GBP')
     dimension_unit = RadioField('Dimension unit', choices=[('MM','mm'), ('IN','in')], default='MM')
-    description = TextAreaField('Description', validators=[DataRequired()])
+    description = TextAreaField('Description')
     documentation = MultipleFileField('Documentation files')
     submit = SubmitField('Submit')

@@ -8,6 +8,6 @@ class MirrorForm(ProductForm):
         Mirror form.
     '''
      
-    diameter = FloatField('Diameter', validators=[DataRequired()])
-    coating = SelectField('Coating', choices=coating_choices, validators=[DataRequired()])
+    diameter = FloatField('Diameter')
+    coating = SelectField('Coating', choices=coating_choices)
     focal_length = FloatField('Focal length')

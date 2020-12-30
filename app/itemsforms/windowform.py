@@ -8,6 +8,6 @@ class WindowForm(ProductForm):
         Window form.
     '''
         
-    diameter = FloatField('Diameter', validators=[DataRequired()])
-    thickness = FloatField('Thickness', validators=[DataRequired()])
-    coating = SelectField('Coating', choices=coating_choices, validators=[DataRequired()])
+    diameter = FloatField('Diameter')
+    thickness = FloatField('Thickness')
+    coating = SelectField('Coating', choices=coating_choices)
