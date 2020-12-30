@@ -12,3 +12,13 @@ log.txt
 tests/__pycache__/conftest.cpython-39-pytest-6.2.1.pyc
 app/utils/__pycache__/routes.cpython-39.pyc
 
+app/__pycache__/__init__.cpython-39.pyc
+
+app/__pycache__/config.cpython-39.pyc
+app/__pycache__/forms.cpython-39.pyc
+app/item/__pycache__/routes.cpython-39.pyc
+app/itemsforms/__pycache__/__init__.cpython-39.pyc
+app/itemsforms/__pycache__/mirrorform.cpython-39.pyc
+app/itemsforms/__pycache__/productform.cpython-39.pyc
+app/itemsforms/__pycache__/windowform.cpython-39.pyc
+app/utils/__pycache__/routes.cpython-39.pyc
