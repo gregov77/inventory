@@ -11,3 +11,4 @@ tmpfile.pdf
 log.txt
 tests/__pycache__/conftest.cpython-39-pytest-6.2.1.pyc
 app/utils/__pycache__/routes.cpython-39.pyc
+

@@ -1,5 +1,5 @@
 from flask import redirect, url_for, request, send_file, Blueprint, jsonify, app
-from app import mongo
+from app import mongo, TMP
 import gridfs
 from bson import ObjectId
 import json
@@ -17,7 +17,7 @@ def get_upload(id):
     fin = fs.find_one({'_id':ObjectId(id)})
     data = fin.read()
     fext = fin.filename[-4:]
-    tmpfile = '/home/gregory/temp/'+'tmpfile'+fext
+    tmpfile = TMP + 'tmpfile' + fext
     with open(tmpfile, 'wb') as fout:
         fout.write(data)
     
