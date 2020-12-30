@@ -1,12 +1,14 @@
 import pytest
+from os import getcwd
 import sys
-sys.path.append('/home/gregory/Documents/webDev/inventory/')
-from app import create_app, mongo, bcrypt
+sys.path.append(getcwd())
+from app import create_app, mongo, bcrypt, ROOT
 import gridfs
 from app.models import InStock, User
 from app.func_helpers import get_productDict
 from app.config import Config_test
 from bson import ObjectId
+
 
 @pytest.fixture
 def app():
@@ -20,7 +22,7 @@ def app():
         fin = fs.find_one({'filename':'CVI-TLM1doctlm1.pdf'})
         if fin:
             fs.delete(fin._id)
-        filename = '/home/gregory/Documents/webDev/inventory/tests/CVI-TLM1doctlm1.pdf'
+        filename = ROOT + '/tests/CVI-TLM1doctlm1.pdf'
         with open(filename, 'rb') as f:
            uid = fs.put(f.read(), filename='CVI-TLM1doctlm1.pdf')
         
