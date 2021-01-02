@@ -30,3 +30,6 @@ app/itemsforms/__pycache__/productform.cpython-39.pyc
 app/itemsforms/__pycache__/windowform.cpython-39.pyc
 app/users/__pycache__/routes.cpython-39.pyc
 tests/__pycache__/conftest.cpython-39-pytest-6.2.1.pyc
+app/itemsforms/__pycache__/__init__.cpython-39.pyc
+app/__pycache__/select_lists.cpython-39.pyc
+app/itemsforms/__pycache__/crystalform.cpython-39.pyc

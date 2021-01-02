@@ -10,6 +10,13 @@ coating_choices = [
     ('uncoated', 'Uncoated')
 ]
 
+crystal_material_choices = [
+    ('TiSa', 'Ti:Sa'),
+    ('BBO', 'BBO'),
+    ('KDP', 'KDP'),
+    ('KTP', 'KTP')
+]
+
 # Pre-defined items organised by group of elements
 # TODO :
 # 'Optics':['Beamsplitters', 'Diffusers', 'Filters',
@@ -18,15 +25,17 @@ coating_choices = [
 #             ]
 choices = {
     'choose a type':'choose a subtype',
-    'Optics':['Mirrors', 'Windows']           
+    'Optics':['Crystals', 'Mirrors', 'Windows']           
         }
 
 get_search_fields = {
     'base': {'manufacturer':'Manufacturer', 'part_number':'Part number', 'description':'Description'},
     'mirrors' : {'diameter':'Diameter', 'coating':'Coating', 'curvature':'Curvature'},
-    'windows' : {'diameter':'Diameter', 'thickness':'Thickness', 'coating':'Coating'}
+    'windows' : {'diameter':'Diameter', 'thickness':'Thickness', 'coating':'Coating'},
+    'crystals': {'width':'Width', 'height':'Height', 'thickness':'Thickness', 'material':'Material',
+                 'coating':'Coating'}
 }
 
 non_str_fields = {
-    'float':['diameter', 'curvature']
+    'float':['diameter', 'curvature', 'width', 'height', 'thickness']
 }
