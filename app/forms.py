@@ -65,6 +65,7 @@ class SearchedItemForm(FlaskForm):
     code = StringField('Code', validators=[DataRequired()])
     room = StringField('Room', validators=[DataRequired()])
     storage = StringField('Storage', validators=[DataRequired()])
+    instock_ref = StringField('Specific reference')
     stocked_date = StringField('Date', validators=[DataRequired()])
     quantity = IntegerField('Quantity',validators=[DataRequired()])
 
@@ -102,6 +103,7 @@ class StoreForm(FlaskForm):
     roomSelect = SelectField('Room', coerce=str, validators=[DataRequired()])
     roomSubmit = SubmitField('Select')
     storageSelect = SelectField('Storage', coerce=str)
+    instock_ref = StringField('Specific reference')
     quantity = IntegerField('Quantity')
     submit = SubmitField('Submit')
 

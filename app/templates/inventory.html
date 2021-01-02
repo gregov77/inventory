@@ -27,6 +27,7 @@
                 <th scope='col'>Code</th>
                 <th scope='col'>Room</th>
                 <th scope='col'>Storage</th>
+                <th scope='col'>Reference</th>
                 <th scope='col'>Date stocked</th>
                 <th scope='col'>Quantity</th>
               </tr>
@@ -39,6 +40,7 @@
                 <th scope='row' class='align-middle'>{{ item.code.data }}</th>
                 <td class='align-middle'>{{ item.room.data }}</td>
                 <td class='align-middle'>{{ item.storage.data }}</td>
+                <td class='align-middle'>{{ item.instock_ref.data }}</td>
                 <td class='align-middle'>{{ item.stocked_date.data }}</td>
                 <td class='align-middle'>{{ item.quantity(class="form-control") }}</td>
               </tr>

@@ -8,7 +8,7 @@ def load_user(user_id):
     return User(user)
 
 
-class User():
+class User:
     '''
         Class to define user characteristics.
 
@@ -58,15 +58,17 @@ class InStock:
         quantity(int): quantity stocked
         room(str): room in which the products are stocked
         storage(str): place in which the products are stocked
+        instock_ref(str): specific reference for the stocked product
 
     Returns:
         Instance of Instock with extra variable stocked_date(datetime.utcnow() as data/time of entry
         into the stock.
     '''
     def __init__(self, id_=None, code=None, quantity=None, 
-                 room=None, storage=None):
+                 room=None, storage=None, instock_ref=None):
         self.code = code
         self.quantity = quantity
         self.room = room
         self.storage = storage
+        self.instock_ref = instock_ref
         self.stocked_date = datetime.utcnow()

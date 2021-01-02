@@ -105,7 +105,8 @@ def storeItem(itemId):
         newStock = InStock(code=itemId,
                            quantity=int(form.quantity.data), 
                            room=form.roomSelect.data,
-                           storage=form.storageSelect.data)
+                           storage=form.storageSelect.data,
+                           instock_ref=form.instock_ref.data)
         query = {'$and':[{'code':newStock.code},
                          {'room':newStock.room},
                          {'storage':newStock.storage}]}

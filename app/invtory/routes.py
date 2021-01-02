@@ -45,13 +45,12 @@ def inventory(query):
 
     if request.method == 'GET':
         for stock in stocks:
-            item = dict(zip(('id_', 'code', 'room', 'storage',
-                             'stocked_date', 'quantity'), 
-                            (stock['_id'],stock['code'],stock['room'],
-                             stock['storage'],stock['stocked_date'].strftime('%Y-%m-%d'),
-                             stock['quantity'])
-                            )
-                        )
+            labels = ('id_', 'code', 'room', 'storage', 'instock_ref', 'stocked_date', 'quantity')
+            stock_values = (stock['_id'],stock['code'],stock['room'], stock['storage'],
+                                stock['instock_ref'], stock['stocked_date'].strftime('%Y-%m-%d'),
+                                stock['quantity'])
+
+            item = dict(zip(labels, stock_values))
             form.items.append_entry(item)
 
     if form.is_submitted():
